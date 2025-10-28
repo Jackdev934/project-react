@@ -60,7 +60,7 @@ const Community = () => {
                 <img
                   key={i}
                   src={src}
-                  className="art-img"
+                  className="art-img1"
                   alt={`Boss Art ${i + 1}`}
                 />
               ))}
@@ -74,7 +74,7 @@ const Community = () => {
                 <img
                   key={i}
                   src={src}
-                  className="art-img"
+                  className="art-img1"
                   alt={`In Game ${i + 1}`}
                 />
               ))}
@@ -88,7 +88,7 @@ const Community = () => {
                 <img
                   key={i}
                   src={src}
-                  className="art-img"
+                  className="art-img1"
                   alt={`Character Art ${i + 1}`}
                 />
               ))}
