@@ -1,0 +1,32 @@
+/* Sign-in card */
+.signin-card {
+  position: relative; max-width: 400px; margin: 80px auto; padding: 30px;
+  background: var(--surface, #11161c); border: 1px solid var(--border, #2a2f36);
+  border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  text-align: center; animation: fadeIn 0.5s ease;
+}
+.signin-title {
+  font-size: 24px; margin-bottom: 20px; color: var(--text, #fff); letter-spacing: 1px;
+}
+.signin-form { display: flex; flex-direction: column; gap: 16px; }
+.signin-form label { text-align: left; font-size: 14px; font-weight: bold; color: var(--muted, #cfcfcf); }
+.signin-form input {
+  padding: 10px; border-radius: 6px; border: 1px solid var(--border, #2a2f36);
+  background: var(--panel-alt, #181c22); color: var(--text, #fff);
+}
+.signin-form input:focus { border-color: var(--accent, #73000A); outline: none; }
+.forgot { font-size: 13px; color: var(--accent, #73000A); text-align: right; display: block; margin-top: -8px; }
+
+.form-row { display: flex; justify-content: space-between; gap: 10px; margin-top: 10px; }
+.pill { flex: 1; }
+.pill.ghost {
+  background: transparent; border: 1px solid var(--accent, #73000A); color: var(--accent, #73000A);
+}
+.pill.ghost:hover { background: var(--accent, #73000A); color: #fff; }
+
+.signin-close {
+  position: absolute; top: 12px; right: 16px;
+  font-size: 28px; font-weight: bold; color: var(--text, #fff);
+  text-decoration: none; transition: color 0.2s ease;
+}
+.signin-close:hover { color: var(--accent, #8b1a1a); }

@@ -1,0 +1,4 @@
+main { min-height: 60vh; }
+section.page { margin: 20px auto; width: min(1100px, 92%); }
+.page h2 { margin-bottom: 12px; }
+.lead { color: var(--muted); margin-bottom: 16px; }

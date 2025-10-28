@@ -1,0 +1,37 @@
+/* Lore page */
+.lore-wrap {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 20px;
+  align-items: start;
+}
+.lore-left { padding: 20px; }
+.lore-right { display: flex; justify-content: center; padding: 20px; }
+
+.aside-images-lore {
+  display: flex; flex-direction: column; gap: 20px;
+  width: 100%; max-width: 500px; align-items: center;
+}
+.aside-images-lore img {
+  width: 100%; height: auto; border-radius: 8px;
+  object-fit: cover; border: 1px solid var(--border);
+}
+
+.lore-buttons { margin-top: 16px; gap: 12px; }
+.lore-btn {
+  background: var(--accent); color: #fff; font-size: 16px; font-weight: bold;
+  padding: 12px; border: none; border-radius: var(--radius);
+  cursor: pointer; text-align: center;
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+.lore-btn:hover { background: #a82323; transform: translateY(-2px); box-shadow: 0 0 6px rgba(180,60,40,0.6); }
+.lore-btn:active { transform: translateY(0); }
+
+@media (max-width: 480px) {
+  .aside-images-lore { grid-template-columns: 1fr; }
+  /* #ash-images if present */
+  #ash-images { grid-template-columns: 1fr; }
+  .lore-left p { font-size: 15px; }
+  .lore-buttons { grid-template-columns: 1fr; }
+  .lore-buttons .lore-btn { padding: 12px; font-size: 16px; }
+}

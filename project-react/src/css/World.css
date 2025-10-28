@@ -1,0 +1,38 @@
+/* World page */
+.world-map-section { margin-top: 20px; text-align: center; }
+.world-map {
+  width: 100%; max-width: 550px; border: 1px solid var(--border);
+  border-radius: var(--radius); margin: 0 auto; display: block;
+}
+
+/* Cards - World Locations */
+.world-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.place-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex; flex-direction: column;
+  justify-content: space-between; align-items: stretch;
+  gap: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 360px; width: 100%; box-sizing: border-box;
+}
+.place-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 15px rgba(139, 26, 26, 0.5);
+}
+.place-card img {
+  width: 100%; height: 220px; object-fit: cover;
+  border-radius: var(--radius); border: 1px solid var(--border);
+}
+
+/* Place modal image (specific id you used) */
+#place-modal-img {
+  width: 600px; height: 400px; object-fit: cover;
+  border-radius: 8px; margin: 15px auto; display: block;
+}

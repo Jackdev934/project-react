@@ -1,0 +1,119 @@
+
+/* Layout for the whole community page */
+.community-wrap {
+  width: 95%;
+  max-width: 1400px;
+  margin: 0 auto 60px;
+  display: grid;
+  grid-template-columns: 2fr 1fr; 
+  gap: 36px;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+/* Left & right panels */
+.community-left,
+.community-right {
+  background: var(--surface, #11161c);
+  border: 1px solid var(--border, #2a2f36);
+  border-radius: var(--radius, 6px);
+  padding: 28px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* Section headings */
+.community-left h3,
+.community-right h3 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: var(--text, #edecec);
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border, #2a2f36);
+  padding-bottom: 8px;
+}
+
+/* Upload button (Community Artwork) */
+.upload-btn {
+  display: block;
+  margin: 0 auto 24px;
+  background: var(--accent, #73000A);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius, 6px);
+  font-weight: bold;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.upload-btn:hover {
+  background: #a82323;
+}
+
+/* ========== IMAGE GRIDS ========== */
+
+.art-grid,
+.comm-grid,
+.thumbs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px;
+  padding: 16px 28px 16px 28px; 
+  justify-items: center; 
+  box-sizing: border-box;
+}
+
+/* Equal-size image tiles */
+.art-grid img,
+.comm-grid img,
+.thumbs img {
+  width: 100%;
+  max-width: 260px; 
+  aspect-ratio: 4 / 3; 
+  object-fit: cover;
+  border-radius: var(--radius, 6px);
+  border: 1px solid var(--border, #2a2f36);
+  background: #1a1a1a;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Hover animation */
+.art-grid img:hover,
+.comm-grid img:hover,
+.thumbs img:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(139, 26, 26, 0.5);
+}
+
+.community-right section {
+  margin-bottom: 36px; 
+  padding-right: 12px;
+}
+.community-left {
+  margin-bottom: 32px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .community-wrap {
+    grid-template-columns: 1fr; 
+  }
+  .community-left,
+  .community-right {
+    width: 100%;
+  }
+  .art-grid,
+  .comm-grid,
+  .thumbs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .art-grid,
+  .comm-grid,
+  .thumbs {
+    grid-template-columns: 1fr; 
+  }
+}

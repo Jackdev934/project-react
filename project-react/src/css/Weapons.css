@@ -1,0 +1,92 @@
+/* Weapons page */
+.weapon-container {
+  width: 94%;
+  max-width: 1280px;
+  margin: 0 auto 40px;
+  padding: 0 12px;
+}
+
+.weapon-head-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 36px;
+  color: var(--text);
+}
+
+.weapon-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+  margin: 20px;
+}
+
+.weapon-section {
+  background: var(--panel-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.weapon-section h2 {
+  font-size: 22px;
+  margin-bottom: 12px;
+  color: var(--text);
+  text-align: center;
+}
+
+/* Weapons horizontal scroller (page-specific) */
+.scroll-gallery {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+}
+.scroll-gallery::-webkit-scrollbar { height: 8px; }
+.scroll-gallery::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.subclass-card {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120px;
+  background: #1a1a1d;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  cursor: pointer;
+}
+.subclass-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  background: #333;
+}
+.subclass-card button {
+  font-size: 14px;
+  background: #2c2620;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #edecec;
+  cursor: pointer;
+}
+.subclass-card button:hover { background: #8b1a1a; }
+
+/* Weapon detail modal */
+#weaponDetailModal .modal-content { max-width: 500px; text-align: center; }
+#weaponDetailModal img {
+  width: 200px; height: 200px; object-fit: cover;
+  margin: 12px auto; border-radius: 6px;
+}
+#weaponDetailDesc {
+  margin-top: 12px; font-size: 15px; color: var(--muted); line-height: 1.4;
+}
+
+/* Weapon slideshow variations */
+#weaponModal .slide img {
+  width: 250px; height: auto; margin: 0 auto 12px; display: block; object-fit: contain;
+}
