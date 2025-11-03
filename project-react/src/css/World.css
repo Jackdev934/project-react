@@ -1,4 +1,4 @@
-/* ===== World Grid (mirrors character-grid) ===== */
+/* World Grid*/
 .page .container .world-grid,
 .world-grid.grid,
 .world-grid.grid-4 {
@@ -11,10 +11,8 @@
   margin: 0 auto;
 }
 
-/* Optional helper if you use `gap-lg` elsewhere */
 .gap-lg { gap: 24px; }
 
-/* Card look & feel (mirrors .char-card) */
 .world-grid .place-card {
   display: flex !important;
   flex-direction: column;
@@ -23,7 +21,7 @@
   border: 1px solid var(--border, #333);
   border-radius: var(--radius, 6px);
   padding: 16px;
-  height: 520px !important;              /* same height as characters */
+  height: 520px !important;              
   box-shadow: 0 6px 18px rgba(0,0,0,0.35);
   transition: transform .25s ease, box-shadow .25s ease;
 }
@@ -33,18 +31,16 @@
   box-shadow: 0 10px 24px rgba(0,0,0,0.45);
 }
 
-/* Image sizing/fit (mirrors .char-card img) */
 .world-grid .place-card img {
   width: 100%;
-  height: 320px !important;          /* consistent tile height */
+  height: 320px !important;         
   height: 320px !important;
   object-fit: cover;
-  object-position: center;                 /* centered for landscapes */
+  object-position: center;                
   border-radius: var(--radius, 6px);
   flex: 0 0 auto;
 }
 
-/* Content spacing inside card */
 .world-grid .place-card .pill,
 .world-grid .place-card button,
 .world-grid .place-card h3,
@@ -53,7 +49,7 @@
   text-align: center;
 }
 
-/* ===== Responsive breakpoints (same as characters) ===== */
+/*Responsive*/
 @media (max-width: 1200px) {
   .page .container .world-grid,
   .world-grid.grid,

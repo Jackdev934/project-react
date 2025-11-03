@@ -6,14 +6,11 @@ export default function ImageGrid({
   images = [],
   imgAltPrefix = "Image",
 
-  // new, optional props for richer tiles
-  items, // [{ src, alt, label, to? }]
-  renderItem, // (item, index) => ReactNode
-
-  imgClass = "art-img",
+  
+  items, renderItem, imgClass = "art-img",
   wrapperClass = "grid grid-4 comm-grid",
 }) {
-  // If `items` provided, prefer that path; else fall back to `images`
+  
   const useItems = Array.isArray(items) && items.length > 0;
   const data = useItems ? items : images.map((src, i) => ({
     src,
