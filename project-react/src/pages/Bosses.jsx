@@ -1,4 +1,6 @@
+// src/pages/Bosses.jsx
 import "./../css/Bosses.css";
+import ImageGrid from "../components/Image Grid";
 
 // Main Game Bosses
 import gundyr from "../images/boss images/gundyr.jpg";
@@ -29,145 +31,85 @@ import midir from "../images/boss images/midir.jpg";
 import gael from "../images/boss images/gael.jpg";
 
 const Bosses = () => {
+  // Build arrays of { src, alt, label } for each section.
+  const mainRow1 = [
+    { src: gundyr,  alt: "Iudex Gundyr",                          label: "Iudex Gundyr" },
+    { src: vordt,   alt: "Vordt of the Boreal Valley",            label: "Vordt of the Boreal Valley" },
+    { src: curse,   alt: "Curse-Rotted Greatwood",                label: "Curse-Rotted Greatwood (optional)" },
+    { src: crystal, alt: "Crystal Sage",                          label: "Crystal Sage" },
+  ];
+
+  const mainRow2 = [
+    { src: deacon,    alt: "Deacons of the Deep",                 label: "Deacons of the Deep" },
+    { src: abyss,     alt: "Abyss Watchers",                      label: "Abyss Watchers" },
+    { src: lord,      alt: "High Lord Wolnir",                    label: "High Lord Wolnir" },
+    { src: demonKing, alt: "Old Demon King",                      label: "Old Demon King (optional)" },
+  ];
+
+  const mainRow3 = [
+    { src: pontiff, alt: "Pontiff Sulyvahn",                      label: "Pontiff Sulyvan" },
+    { src: yhorm,   alt: "Yhorm the Giant",                       label: "Yhorm the Giant" },
+    { src: aldrich, alt: "Aldrich, Devourer of Gods",             label: "Aldrich, Devourer of Gods" },
+    { src: dancer,  alt: "Dancer of the Boreal Valley",           label: "Dancer of the Boreal Valley" },
+  ];
+
+  const mainRow4 = [
+    { src: dragon,  alt: "Dragonslayer Armour",                   label: "Dragonslayer Armour" },
+    { src: oceiros, alt: "Oceiros, the Consumed King",            label: "Oceiros, the Consumed King (optional)" },
+    { src: cgundyr, alt: "Champion Gundyr",                       label: "Champion Gundyr" },
+    { src: twin,    alt: "Lothric and Lorian",                    label: "Lothric, Younger Prince and Lorian, Elder Prince" },
+  ];
+
+  const mainRow5 = [
+    { src: wyvern,   alt: "Ancient Wyvern",                       label: "Ancient Wyvern (optional)" },
+    { src: nameless, alt: "Nameless King",                        label: "Nameless King (optional)" },
+    { src: soul,     alt: "Soul of Cinder",                       label: "Soul of Cinder" },
+  ];
+
+  const dlcRow = [
+    { src: grave,    alt: "Champion's Gravetender",               label: "Champion's Gravetender & Gravetender Greatwolf" },
+    { src: sister,   alt: "Sister Friede",                        label: "Sister Friede" },
+    { src: prince,   alt: "Demon Prince",                         label: "Demon Prince" },
+    { src: halflight,alt: "Halflight, Spear of the Church",       label: "Halflight, Spear of the Church" },
+    { src: midir,    alt: "Darkeater Midir",                      label: "Darkeater Midir" },
+    { src: gael,     alt: "Slave Knight Gael",                    label: "Slave Knight Gael" },
+  ];
+
   return (
     <>
       <h2 className="boss-title">Main Game Bosses:</h2>
 
       <div className="container band-dark">
-        <div className="grid grid-4 boss-grid">
-          <article className="boss-card">
-            <img src={gundyr} alt="Iudex Gundyr" />
-            <button className="pill">Iudex Gundyr</button>
-          </article>
-          <article className="boss-card">
-            <img src={vordt} alt="Vordt of the Boreal Valley" />
-            <button className="pill">Vordt of the Boreal Valley</button>
-          </article>
-          <article className="boss-card">
-            <img src={curse} alt="Curse-Rotted Greatwood" />
-            <button className="pill">Curse-Rotted Greatwood (optional)</button>
-          </article>
-          <article className="boss-card">
-            <img src={crystal} alt="Crystal Sage" />
-            <button className="pill">Crystal Sage</button>
-          </article>
-        </div>
+        <ImageGrid
+          items={mainRow1}
+          wrapperClass="grid grid-4 boss-grid"
+          imgClass="art-img"
+        />
       </div>
 
       <div className="container band-dark">
-        <div className="grid grid-4 boss-grid">
-          <article className="boss-card">
-            <img src={deacon} alt="Deacons of the Deep" />
-            <button className="pill">Deacons of the Deep</button>
-          </article>
-          <article className="boss-card">
-            <img src={abyss} alt="Abyss Watchers" />
-            <button className="pill">Abyss Watchers</button>
-          </article>
-          <article className="boss-card">
-            <img src={lord} alt="High Lord Wolnir" />
-            <button className="pill">High Lord Wolnir</button>
-          </article>
-          <article className="boss-card">
-            <img src={demonKing} alt="Old Demon King" />
-            <button className="pill">Old Demon King (optional)</button>
-          </article>
-        </div>
+        <ImageGrid items={mainRow2} wrapperClass="grid grid-4 boss-grid" imgClass="art-img" />
       </div>
 
       <div className="container band-dark">
-        <div className="grid grid-4 boss-grid">
-          <article className="boss-card">
-            <img src={pontiff} alt="Pontiff Sulyvan" />
-            <button className="pill">Pontiff Sulyvan</button>
-          </article>
-          <article className="boss-card">
-            <img src={yhorm} alt="Yhorm the Giant" />
-            <button className="pill">Yhorm the Giant</button>
-          </article>
-          <article className="boss-card">
-            <img src={aldrich} alt="Aldrich, Devourer of Gods" />
-            <button className="pill">Aldrich, Devourer of Gods</button>
-          </article>
-          <article className="boss-card">
-            <img src={dancer} alt="Dancer of the Boreal Valley" />
-            <button className="pill">Dancer of the Boreal Valley</button>
-          </article>
-        </div>
+        <ImageGrid items={mainRow3} wrapperClass="grid grid-4 boss-grid" imgClass="art-img" />
       </div>
 
       <div className="container band-dark">
-        <div className="grid grid-4 boss-grid">
-          <article className="boss-card">
-            <img src={dragon} alt="Dragonslayer Armour" />
-            <button className="pill">Dragonslayer Armour</button>
-          </article>
-          <article className="boss-card">
-            <img src={oceiros} alt="Oceiros, the Consumed King" />
-            <button className="pill">Oceiros, the Consumed King (optional)</button>
-          </article>
-          <article className="boss-card">
-            <img src={cgundyr} alt="Champion Gundyr" />
-            <button className="pill">Champion Gundyr</button>
-          </article>
-          <article className="boss-card">
-            <img src={twin} alt="Lothric and Lorian" />
-            <button className="pill">Lothric, Younger Prince and Lorian, Elder Prince</button>
-          </article>
-        </div>
+        <ImageGrid items={mainRow4} wrapperClass="grid grid-4 boss-grid" imgClass="art-img" />
       </div>
 
       <div className="container band-dark">
-        <div className="grid grid-4 boss-grid">
-          <article className="boss-card">
-            <img src={wyvern} alt="Ancient Wyvern" />
-            <button className="pill">Ancient Wyvern (optional)</button>
-          </article>
-          <article className="boss-card">
-            <img src={nameless} alt="Nameless King" />
-            <button className="pill">Nameless King (optional)</button>
-          </article>
-          <article className="boss-card">
-            <img src={soul} alt="Soul of Cinder" />
-            <button className="pill">Soul of Cinder</button>
-          </article>
-        </div>
+        <ImageGrid items={mainRow5} wrapperClass="grid grid-4 boss-grid" imgClass="art-img" />
       </div>
 
       <h2 className="boss-title">DLC Bosses:</h2>
 
       <div className="container band-dark">
-        <div className="grid grid-4 boss-grid">
-          <article className="boss-card">
-            <img src={grave} alt="Champion's Gravetender" />
-            <button className="pill">Champion's Gravetender &amp; Gravetender Greatwolf</button>
-          </article>
-          <article className="boss-card">
-            <img src={sister} alt="Sister Friede" />
-            <button className="pill">Sister Friede</button>
-          </article>
-          <article className="boss-card">
-            <img src={prince} alt="Demon Prince" />
-            <button className="pill">Demon Prince</button>
-          </article>
-          <article className="boss-card">
-            <img src={halflight} alt="Halflight" />
-            <button className="pill">Halflight, Spear of the Church</button>
-          </article>
-
-          <article className="boss-card">
-            <img src={midir} alt="Darkeater Midir" />
-            <button className="pill">Darkeater Midir</button>
-          </article>
-          <article className="boss-card">
-            <img src={gael} alt="Slave Knight Gael" />
-            <button className="pill">Slave Knight Gael</button>
-          </article>
-        </div>
+        <ImageGrid items={dlcRow} wrapperClass="grid grid-4 boss-grid" imgClass="art-img" />
       </div>
-
     </>
   );
 };
 
-export default Bosses;
+export default  Bosses;

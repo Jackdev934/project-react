@@ -1,4 +1,6 @@
+// src/pages/World.jsx
 import "../css/World.css";
+import ImageGrid from "../components/Image Grid";
 
 /* ========= Image Imports ========= */
 import firelink from "../images/world images/firelink.jpeg";
@@ -23,6 +25,33 @@ import painted from "../images/world images/painted.jpeg";
 import dreg from "../images/world images/dreg.jpeg";
 import ring from "../images/world images/ring.jpeg";
 
+/* ========= Data ========= */
+const mainLocations = [
+  { name: "Firelink Shrine", src: firelink },
+  { name: "Cemetery of Ash", src: cemetary },
+  { name: "High Wall of Lothric", src: lothric },
+  { name: "Undead Settlement", src: undead },
+  { name: "Road of Sacrifices", src: sacrifices },
+  { name: "Cathedral of the Deep", src: cathedral },
+  { name: "Farron Keep", src: farron },
+  { name: "Catacombs of Carthus", src: catacombs },
+  { name: "Smouldering Lake", src: smouldering },
+  { name: "Irithyll of the Boreal Valley", src: boreal },
+  { name: "Irithyll Dungeon", src: dungeon },
+  { name: "Profaned Capital", src: profaned },
+  { name: "Anor Londo", src: anor },
+  { name: "Lothric Castle", src: castle },
+  { name: "Consumed King’s Garden", src: consumed },
+  { name: "Grand Archives", src: archives },
+  { name: "Kiln of the First Flame", src: kiln },
+];
+
+const dlcLocations = [
+  { name: "Painted World of Ariandel", src: painted },
+  { name: "The Dreg Heap",            src: dreg },
+  { name: "The Ringed City",          src: ring },
+];
+
 /* ========= Component ========= */
 const World = () => {
   return (
@@ -30,110 +59,43 @@ const World = () => {
       <h2>World Locations</h2>
 
       <h2 className="boss-title">Main Story Locations</h2>
-      <div className="grid grid-3 gap-lg world-grid">
-        <article className="place-card" data-place="Firelink Shrine">
-          <img src={firelink} alt="Firelink Shrine" />
-          <button className="pill">Firelink Shrine</button>
-        </article>
-
-        <article className="place-card" data-place="Cemetery of Ash">
-          <img src={cemetary} alt="Cemetery of Ash" />
-          <button className="pill">Cemetery of Ash</button>
-        </article>
-
-        <article className="place-card" data-place="High Wall of Lothric">
-          <img src={lothric} alt="High Wall of Lothric" />
-          <button className="pill">High Wall of Lothric</button>
-        </article>
-
-        <article className="place-card" data-place="Undead Settlement">
-          <img src={undead} alt="Undead Settlement" />
-          <button className="pill">Undead Settlement</button>
-        </article>
-
-        <article className="place-card" data-place="Road of Sacrifices">
-          <img src={sacrifices} alt="Road of Sacrifices" />
-          <button className="pill">Road of Sacrifices</button>
-        </article>
-
-        <article className="place-card" data-place="Cathedral of the Deep">
-          <img src={cathedral} alt="Cathedral of the Deep" />
-          <button className="pill">Cathedral of the Deep</button>
-        </article>
-
-        <article className="place-card" data-place="Farron Keep">
-          <img src={farron} alt="Farron Keep" />
-          <button className="pill">Farron Keep</button>
-        </article>
-
-        <article className="place-card" data-place="Catacombs of Carthus">
-          <img src={catacombs} alt="Catacombs of Carthus" />
-          <button className="pill">Catacombs of Carthus</button>
-        </article>
-
-        <article className="place-card" data-place="Smouldering Lake">
-          <img src={smouldering} alt="Smouldering Lake" />
-          <button className="pill">Smouldering Lake</button>
-        </article>
-
-        <article className="place-card" data-place="Irithyll of the Boreal Valley">
-          <img src={boreal} alt="Irithyll of the Boreal Valley" />
-          <button className="pill">Irithyll of the Boreal Valley</button>
-        </article>
-
-        <article className="place-card" data-place="Irithyll Dungeon">
-          <img src={dungeon} alt="Irithyll Dungeon" />
-          <button className="pill">Irithyll Dungeon</button>
-        </article>
-
-        <article className="place-card" data-place="Profaned Capital">
-          <img src={profaned} alt="Profaned Capital" />
-          <button className="pill">Profaned Capital</button>
-        </article>
-
-        <article className="place-card" data-place="Anor Londo">
-          <img src={anor} alt="Anor Londo" />
-          <button className="pill">Anor Londo</button>
-        </article>
-
-        <article className="place-card" data-place="Lothric Castle">
-          <img src={castle} alt="Lothric Castle" />
-          <button className="pill">Lothric Castle</button>
-        </article>
-
-        <article className="place-card" data-place="Consumed King’s Garden">
-          <img src={consumed} alt="Consumed King’s Garden" />
-          <button className="pill">Consumed King’s Garden</button>
-        </article>
-
-        <article className="place-card" data-place="Grand Archives">
-          <img src={archives} alt="Grand Archives" />
-          <button className="pill">Grand Archives</button>
-        </article>
-
-        <article className="place-card" data-place="Kiln of the First Flame">
-          <img src={kiln} alt="Kiln of the First Flame" />
-          <button className="pill">Kiln of the First Flame</button>
-        </article>
+      <div className="container band-dark">
+        <ImageGrid
+          items={mainLocations.map(({ name, src }) => ({
+            src,
+            alt: name,
+            label: name,
+          }))}
+          /* Use 4-up grid by default; change to grid-3 if you prefer */
+          wrapperClass="grid grid-4 gap-lg world-grid"
+          imgClass="art-img"
+          /* Keep your existing markup for styling */
+          renderItem={(item, i) => (
+            <article key={`main-${i}`} className="place-card" data-place={item.label}>
+              <img src={item.src} alt={item.alt} className="art-img" loading="lazy" />
+              <button className="pill">{item.label}</button>
+            </article>
+          )}
+        />
       </div>
 
-      {/* DLC */}
       <h2 className="boss-title">DLC Locations</h2>
-      <div className="grid grid-3 gap-lg world-grid">
-        <article className="place-card" data-place="Painted World of Ariandel">
-          <img src={painted} alt="Painted World of Ariandel" />
-          <button className="pill">Painted World of Ariandel</button>
-        </article>
-
-        <article className="place-card" data-place="The Dreg Heap">
-          <img src={dreg} alt="The Dreg Heap" />
-          <button className="pill">The Dreg Heap</button>
-        </article>
-
-        <article className="place-card" data-place="The Ringed City">
-          <img src={ring} alt="The Ringed City" />
-          <button className="pill">The Ringed City</button>
-        </article>
+      <div className="container band-dark">
+        <ImageGrid
+          items={dlcLocations.map(({ name, src }) => ({
+            src,
+            alt: name,
+            label: name,
+          }))}
+          wrapperClass="grid grid-4 gap-lg world-grid"
+          imgClass="art-img"
+          renderItem={(item, i) => (
+            <article key={`dlc-${i}`} className="place-card" data-place={item.label}>
+              <img src={item.src} alt={item.alt} className="art-img" loading="lazy" />
+              <button className="pill">{item.label}</button>
+            </article>
+          )}
+        />
       </div>
     </section>
   );

@@ -1,66 +1,81 @@
-/* World page */
-.world-map-section {
-  margin-top: 20px;
-  text-align: center;
-}
-.world-map {
+/* ===== World Grid (mirrors character-grid) ===== */
+.page .container .world-grid,
+.world-grid.grid,
+.world-grid.grid-4 {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 24px !important;
+  align-items: stretch !important;
+  justify-items: stretch !important;
   width: 100%;
-  max-width: 550px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
   margin: 0 auto;
-  display: block;
 }
 
-/* Cards - World Locations */
-.world-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  justify-items: center;
-  padding: 20px;
-}
+/* Optional helper if you use `gap-lg` elsewhere */
+.gap-lg { gap: 24px; }
 
-.place-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  display: flex;
+/* Card look & feel (mirrors .char-card) */
+.world-grid .place-card {
+  display: flex !important;
   flex-direction: column;
   justify-content: space-between;
-  align-items: stretch;
-  gap: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  min-height: 360px;
-  width: 100%;
-  box-sizing: border-box;
-  max-width: 280px; 
+  background: var(--panel, #1a1c1f);
+  border: 1px solid var(--border, #333);
+  border-radius: var(--radius, 6px);
+  padding: 16px;
+  height: 520px !important;              /* same height as characters */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  transition: transform .25s ease, box-shadow .25s ease;
 }
 
-.place-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 15px rgba(139, 26, 26, 0.5);
+.world-grid .place-card:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.45);
 }
 
-.place-card img {
+/* Image sizing/fit (mirrors .char-card img) */
+.world-grid .place-card img {
   width: 100%;
-  height: 220px;
+  height: 320px !important;          /* consistent tile height */
+  height: 320px !important;
   object-fit: cover;
-  border-radius: var(--radius);
-  
-  border: 1px solid var(--border);
+  object-position: center;                 /* centered for landscapes */
+  border-radius: var(--radius, 6px);
+  flex: 0 0 auto;
 }
 
-/* Responsive breakpoints */
-@media (max-width: 1024px) {
-  .world-grid {
-    grid-template-columns: repeat(2, 1fr); 
+/* Content spacing inside card */
+.world-grid .place-card .pill,
+.world-grid .place-card button,
+.world-grid .place-card h3,
+.world-grid .place-card p {
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* ===== Responsive breakpoints (same as characters) ===== */
+@media (max-width: 1200px) {
+  .page .container .world-grid,
+  .world-grid.grid,
+  .world-grid.grid-4 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .page .container .world-grid,
+  .world-grid.grid,
+  .world-grid.grid-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
 }
 
 @media (max-width: 600px) {
-  .world-grid {
-    grid-template-columns: 1fr;
+  .page .container .world-grid,
+  .world-grid.grid,
+  .world-grid.grid-4 {
+    grid-template-columns: 1fr !important;
   }
+  .world-grid .place-card { height: 440px !important; }
+  .world-grid .place-card img { height: 260px !important; }
 }

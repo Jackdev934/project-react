@@ -1,4 +1,7 @@
+// src/pages/Characters.jsx
 import "../css/Characters.css";
+import ImageGrid from "../components/Image Grid";
+
 import andre from "../images/character images/andre.jpeg";
 import firekeeper from "../images/character images/fire.jpeg";
 import leonhard from "../images/character images/ringfinger.jpeg";
@@ -53,7 +56,6 @@ import filianore from "../images/character images/filianore.jpeg";
 import moaning from "../images/character images/moaning.jpeg";
 import hollow from "../images/character images/hollow.jpeg";
 import ledo from "../images/character images/ledo.jpeg";
-import "../css/Characters.css";
 
 const sections = [
   {
@@ -131,19 +133,13 @@ const sections = [
       { name: "Londor Pale Shade", src: londor },
     ],
   },
-  {
-    title: "Irithyll Dungeon",
-    items: [{ name: "Karla", src: karla }],
-  },
-  {
-    title: "Anor Londo",
-    items: [{ name: "Company Captain Yorshka", src: company }],
-  },
+  { title: "Irithyll Dungeon", items: [{ name: "Karla", src: karla }] },
+  { title: "Anor Londo",       items: [{ name: "Company Captain Yorshka", src: company }] },
   {
     title: "Grand Archives",
     items: [
       { name: "Black Hand Gotthard", src: gotthard },
-      { name: "Black Hand Kamui", src: kamui },
+      { name: "Black Hand Kamui",    src: kamui },
       { name: "Daughter of Crystal Kriemhild", src: daughter },
     ],
   },
@@ -151,54 +147,65 @@ const sections = [
     title: "Painted World of Ariandel",
     items: [
       { name: "Sister Friede", src: friede },
-      { name: "Sir Vilhelm", src: sir },
+      { name: "Sir Vilhelm",   src: sir },
       { name: "Corvian Settler", src: settler },
-      { name: "Painting Woman", src: painting },
+      { name: "Painting Woman",  src: painting },
       { name: "Livid Pyromancer Dunnel", src: livid },
     ],
   },
-  {
-    title: "Dreg Heap",
-    items: [
-      { name: "Stone-humped Hag", src: hag },
-      { name: "Lapp", src: lapp },
-    ],
-  },
+  { title: "Dreg Heap",     items: [{ name: "Stone-humped Hag", src: hag }, { name: "Lapp", src: lapp }] },
   {
     title: "The Ringed City",
     items: [
       { name: "Shira", src: shira },
       { name: "Locust Preacher", src: preacher },
-      { name: "Judicator Argo", src: argo },
-      { name: "Filianore", src: filianore },
-      { name: "Moaning Knight", src: moaning },
+      { name: "Judicator Argo",  src: argo },
+      { name: "Filianore",       src: filianore },
+      { name: "Moaning Knight",  src: moaning },
       { name: "Ringed City Hollow", src: hollow },
       { name: "Silver Knight Ledo", src: ledo },
     ],
   },
 ];
 
-/* ========= Component ========= */
 const Characters = () => {
   return (
     <section className="page">
       <h2>Characters</h2>
       <main>
-        {sections.map((section, idx) => (
-          <div key={idx}>
-            <h2 className="boss-title">{section.title}:</h2>
-            <div className="container band-dark">
-              <div className="grid grid-4 character-grid">
-                {section.items.map((c, i) => (
-                  <article key={`${section.title}-${i}`} className="char-card">
-                    <img src={c.src} alt={c.name} />
-                    <button className="pill">{c.name}</button>
-                  </article>
-                ))}
+        {sections.map((section, idx) => {
+          // map section.items -> ImageGrid `items` shape
+          const gridItems = section.items.map(({ name, src }) => ({
+            src,
+            alt: name,
+            label: name,
+          }));
+
+          return (
+            <div key={idx}>
+              <h2 className="boss-title">{section.title}:</h2>
+              <div className="container band-dark">
+                <ImageGrid
+                  items={gridItems}
+                  wrapperClass="grid grid-4 character-grid"
+                  imgClass="art-img"
+                  // Use a custom renderer so we keep your existing .char-card + .pill structure
+                  renderItem={(item, i) => (
+                    <article key={`${section.title}-${i}`} className="char-card">
+                      <img
+                        src={item.src}
+                        alt={item.alt}
+                        className="art-img"
+                        loading="lazy"
+                      />
+                      <button className="pill">{item.label}</button>
+                    </article>
+                  )}
+                />
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </main>
     </section>
   );
