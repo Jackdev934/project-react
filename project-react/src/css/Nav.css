@@ -1,0 +1,175 @@
+/* ================================
+   Global nav container
+   ================================ */
+#main-nav {
+  background: var(--surface, #11161c);
+  border-bottom: 1px solid var(--border, #2a2f36);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  position: sticky;            /* optional: keep nav visible when scrolling */
+  top: 0;
+  z-index: 1000;
+}
+
+/* Optional wrapper if you want a max-width layout */
+/*
+.top-nav {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+*/
+
+/* ================================
+   Toggle (hamburger/close) button
+   ================================ */
+#toggle-nav {
+  display: flex;                   /* Use flex to easily center content */
+  justify-content: center;         /* Center horizontally */
+  align-items: center;             /* Center vertically */
+  width: 100%;
+  height: 60px;                    /* Taller area for touch targets */
+  background: var(--panel-alt, #181c22);
+  color: var(--text, #ffffff);
+  font-size: 2rem;                 /* Makes ☰ / ✖ larger */
+  border: none;
+  border-bottom: 1px solid var(--border, #2a2f36);
+  cursor: pointer;
+  appearance: none;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+#toggle-nav:hover,
+#toggle-nav:focus {
+  color: var(--accent, #73000A);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+#toggle-nav:focus-visible {
+  outline: 2px solid var(--accent, #73000A);
+  outline-offset: 2px;
+}
+
+
+/* ================================
+   Menu list + items
+   ================================ */
+#main-nav ul#nav-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#main-nav .hide-small {
+  display: none;
+}
+
+#main-nav li {
+  list-style-type: none;
+  border-bottom: 1px solid var(--border, #2a2f36);
+  background: var(--panel-alt, #181c22);
+}
+
+#main-nav li:last-child {
+  border-bottom: 0;
+}
+
+/* Links inside items */
+#main-nav li > a {
+  display: block;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: var(--text, #ffffff);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+#main-nav li > a:hover,
+#main-nav li > a:focus {
+  color: var(--accent, #73000A);
+}
+
+#main-nav li > a:focus-visible {
+  outline: 2px solid var(--accent, #73000A);
+  outline-offset: 2px;
+}
+
+/* Active link state */
+#main-nav a.active {
+  color: var(--accent, #73000A);
+  border-left: 3px solid var(--accent, #73000A);
+  background: color-mix(in oklab, var(--panel-alt, #181c22) 80%, var(--accent, #73000A) 20%);
+}
+
+/* Fallback if color-mix not supported */
+@supports not (color: color-mix(in oklab, white, black)) {
+  #main-nav a.active {
+    background: rgba(115, 0, 10, 0.12);
+  }
+}
+
+/* ================================
+   Desktop / larger screens
+   ================================ */
+@media screen and (min-width: 768px) {
+  /* Hide the hamburger on larger screens */
+  #toggle-nav {
+    display: none;
+  }
+
+  /* Always show the menu row on desktop */
+  #main-nav .hide-small {
+    display: flex;
+  }
+
+  #main-nav ul#nav-list {
+    display: flex;
+    align-items: center;
+    gap: 0; /* set >0 for spaced-out items */
+  }
+
+  #main-nav li {
+    border-bottom: 0;
+    background: transparent;
+  }
+
+  /* Make items share space evenly; remove if you prefer natural width */
+  #main-nav li {
+    flex: 1 1 auto;
+  }
+
+  #main-nav li > a {
+    padding: 14px 16px;
+    border-bottom: 3px solid transparent;
+    border-left: none; /* override mobile active style */
+  }
+
+  /* Hover/active underline on desktop */
+  #main-nav li > a:hover,
+  #main-nav li > a:focus {
+    background: transparent;
+    color: var(--accent, #73000A);
+    border-bottom-color: var(--accent, #73000A);
+  }
+
+  #main-nav a.active {
+    background: transparent;
+    border-bottom-color: var(--accent, #73000A);
+    color: var(--accent, #73000A);
+  }
+}
+
+/* ================================
+   Optional: subtle open/close animation on mobile
+   (requires .hide-small to toggle between none and block;
+    we fake a slide by transitioning max-height)
+   ================================ */
+@media (max-width: 767.98px) {
+  #main-nav ul#nav-list {
+    overflow: hidden;
+    transition: max-height 220ms ease;
+    max-height: 800px; /* enough when visible (when class 'hide-small' is removed) */
+  }
+  #main-nav .hide-small {
+    max-height: 0;
+  }
+}

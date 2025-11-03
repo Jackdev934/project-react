@@ -3,6 +3,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
+import Card from "./components/Card";
+import Carousel from "./components/Carousel";
+import Grid from "./components/Grid";
+import Modal from "./components/Modal";
+import Section from "./components/Section";
+import ImageGrid from "./components/Image Grid";
 import Home from "./pages/Home";
 import Bosses from "./pages/Bosses";
 import Characters from "./pages/Characters";
@@ -13,7 +19,6 @@ import Guides from "./pages/Guides";
 import Community from "./pages/Community";
 import About from "./pages/About";
 import Sign from "./pages/Sign";
-
 import "./App.css";
 
 function Layout() {

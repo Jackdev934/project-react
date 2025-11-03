@@ -1,6 +1,32 @@
 import "../css/About.css";
+import { useState } from "react";
 
 const About = () => {
+  const [result, setResult] = useState("");
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setResult("Sending....");
+    const formData = new FormData(event.target);
+
+    formData.append("access_key", "8bb4245c-6735-4353-887e-ffad510d947d");
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      setResult("Form Submitted Successfully");
+      event.target.reset();
+    } else {
+      console.log("Error", data);
+      setResult(data.message);
+    }
+  };
+
   return (
     <section className="page">
       <h2>About Us</h2>
@@ -21,44 +47,21 @@ const About = () => {
         </section>
 
         {/* Contact Section */}
-        <section className="about-left band-brown">
+        <section id ="contact-form" className="about-left band-brown">
           <h3>Contact Us</h3>
           <p><strong>Phone Number:</strong> 000-000-0000</p>
           <p><strong>Email:</strong> someone123@gmail.com</p>
 
-          <form method="POST" id="contact-form">
-            <input
-              type="hidden"
-              name="access_key"
-              value="8bb4245c-6735-4353-887e-ffad510d947d"
-            />
+          <div id ="contact-form">
+            <form onSubmit={onSubmit}>
+              <input type="text" name="name" required />
+              <input type="email" name="email" required />
+              <textarea name="message" required></textarea>
 
-            <p>
-              <label htmlFor="name">Name:</label>
-              <input type="text" id="name" name="name" required />
-            </p>
-
-            <p>
-              <label htmlFor="email">Email:</label>
-              <input type="email" id="email" name="email" required />
-            </p>
-
-            <p>
-              <label htmlFor="message">Message:</label>
-              <textarea id="message" name="message" required></textarea>
-            </p>
-
-            <input
-              type="checkbox"
-              name="botcheck"
-              className="hidden"
-              style={{ display: "none" }}
-            />
-
-            <button type="submit">Submit Form</button>
-          </form>
-
-          <div id="contact-result" aria-live="polite" role="status"></div>
+              <button type="submit">Submit Form</button>
+            </form>
+            <span>{result}</span>
+          </div>
         </section>
 
         {/* Location Section */}

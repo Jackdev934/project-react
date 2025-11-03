@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import "../css/Home.css";
+import Slideshow from "../components/Slideshow";
 
 /* ========= Image Imports ========= */
 import characters from "../images/home img/characters.jpeg";
@@ -20,6 +21,8 @@ import fan7 from "../images/home img/fan7.jpeg";
 import map from "../images/home img/map-2.jpg";
 
 const Home = () => {
+  const artworkImages = [fan1, fan2, fan3, fan4, fan5, fan6, fan7];
+
   return (
     <section className="page">
       <h2>Welcome to Astora’s Archive</h2>
@@ -87,15 +90,9 @@ const Home = () => {
               </article>
             </div>
 
-            {/* Community Artwork */}
+            {/* Community Artwork → Slideshow */}
             <h2 className="panel-title">Community Artwork</h2>
-            <div className="scroll-gallery">
-              <div className="scroll-track">
-                {[fan1, fan2, fan3, fan4, fan5, fan6, fan7].map((src, i) => (
-                  <img key={i} src={src} alt={`Fan Art ${i + 1}`} />
-                ))}
-              </div>
-            </div>
+            <Slideshow images={artworkImages} altPrefix="Fan Art" />
 
             {/* World Map Section */}
             <div className="world-map-section">
