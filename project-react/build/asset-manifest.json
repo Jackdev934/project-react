@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/project-react/static/css/main.45c8fa70.css",
-    "main.js": "/project-react/static/js/main.30625e9a.js",
+    "main.css": "/project-react/static/css/main.beca6180.css",
+    "main.js": "/project-react/static/js/main.7a926f92.js",
     "static/media/map-2.jpg": "/project-react/static/media/map-2.f7b8831c1cee83c2f6f9.jpg",
     "static/media/Greataxe.png": "/project-react/static/media/Greataxe.35b50833022bcbf741da.png",
     "static/media/demon's_scar.png": "/project-react/static/media/demon's_scar.825ef568c2e5c1245625.png",
@@ -78,11 +78,11 @@
     "static/media/dreg.jpeg": "/project-react/static/media/dreg.82c18ac1836552fb4b12.jpeg",
     "static/media/Short_Bow_29.webp": "/project-react/static/media/Short_Bow_29.cf9db36859c115bef090.webp",
     "index.html": "/project-react/index.html",
-    "main.45c8fa70.css.map": "/project-react/static/css/main.45c8fa70.css.map",
-    "main.30625e9a.js.map": "/project-react/static/js/main.30625e9a.js.map"
+    "main.beca6180.css.map": "/project-react/static/css/main.beca6180.css.map",
+    "main.7a926f92.js.map": "/project-react/static/js/main.7a926f92.js.map"
   },
   "entrypoints": [
-    "static/css/main.45c8fa70.css",
-    "static/js/main.30625e9a.js"
+    "static/css/main.beca6180.css",
+    "static/js/main.7a926f92.js"
   ]
 }
