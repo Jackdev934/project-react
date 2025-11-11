@@ -1,9 +1,9 @@
+// src/App.js
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
-import ImageGrid from "./components/Image Grid";
 import Home from "./pages/Home";
 import Bosses from "./pages/Bosses";
 import Characters from "./pages/Characters";
@@ -41,8 +41,14 @@ function Layout() {
 }
 
 export default function App() {
+  // IMPORTANT: basename is just the PATH, not the full URL
+  const basename =
+    process.env.NODE_ENV === "production"
+      ? "/csce242/project-react"
+      : "/";
+
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL || "/"}>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/*" element={<Layout />} />
       </Routes>

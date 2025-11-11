@@ -3,15 +3,14 @@ import { useState, useEffect } from "react";
 import "./../css/Bosses.css";
 import ImageGrid from "../components/Image Grid";
 import Modal from "../components/Modal";
+import BACKEND_URL from "../config";
 
-// Helper to build image URLs (update base URL for deployed backend)
-const API_BASE_URL = "https://project-backend-fl7h.onrender.com"; // ← replace with your Render backend URL
-
+// Build full URL for image (works with /images/... from backend)
 const buildImgUrl = (img) => {
   if (!img) return null;
   if (img.startsWith("http://") || img.startsWith("https://")) return img;
-  if (img.startsWith("/")) return `${API_BASE_URL}${img}`;
-  return `${API_BASE_URL}/${img}`;
+  if (img.startsWith("/")) return `${BACKEND_URL}${img}`;
+  return `${BACKEND_URL}/${img}`;
 };
 
 const Bosses = () => {
@@ -23,7 +22,7 @@ const Bosses = () => {
   useEffect(() => {
     const fetchBosses = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/bosses`);
+        const res = await fetch(`${BACKEND_URL}/api/bosses`);
 
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);

@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 import "../css/Characters.css";
 import ImageGrid from "../components/Image Grid";
 import Modal from "../components/Modal";
+import BACKEND_URL from "../config";
 
 // Helper to build a full URL from backend paths like "/images/characters/andre.jpeg"
 const buildImgUrl = (img) => {
   if (!img) return null;
   if (img.startsWith("http://") || img.startsWith("https://")) return img;
-  if (img.startsWith("/")) return `https://project-backend-fl7h.onrender.com${img}`;
-  return `https://project-backend-fl7h.onrender.com/${img}`;
+  if (img.startsWith("/")) return `${BACKEND_URL}${img}`;
+  return `${BACKEND_URL}/${img}`;
 };
 
 const Characters = () => {
@@ -22,7 +23,7 @@ const Characters = () => {
     const fetchCharacters = async () => {
       try {
         console.log("Fetching characters from backend...");
-        const res = await fetch("https://project-backend-fl7h.onrender.com/api/characters");
+        const res = await fetch(`${BACKEND_URL}/api/characters`);
 
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);
