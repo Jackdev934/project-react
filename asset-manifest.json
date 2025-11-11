@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.26bed963.css",
-    "main.js": "/static/js/main.196a73a8.js",
+    "main.js": "/static/js/main.5937a0d1.js",
     "static/media/map-2.jpg": "/static/media/map-2.f7b8831c1cee83c2f6f9.jpg",
     "static/media/Greataxe.png": "/static/media/Greataxe.35b50833022bcbf741da.png",
     "static/media/demon's_scar.png": "/static/media/demon's_scar.825ef568c2e5c1245625.png",
@@ -66,10 +66,10 @@
     "static/media/Short_Bow_29.webp": "/static/media/Short_Bow_29.cf9db36859c115bef090.webp",
     "index.html": "/index.html",
     "main.26bed963.css.map": "/static/css/main.26bed963.css.map",
-    "main.196a73a8.js.map": "/static/js/main.196a73a8.js.map"
+    "main.5937a0d1.js.map": "/static/js/main.5937a0d1.js.map"
   },
   "entrypoints": [
     "static/css/main.26bed963.css",
-    "static/js/main.196a73a8.js"
+    "static/js/main.5937a0d1.js"
   ]
 }
