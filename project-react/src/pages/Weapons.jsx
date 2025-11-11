@@ -1,4 +1,7 @@
+// src/pages/Weapons.jsx
+import { useState } from "react";
 import "../css/Weapons.css";
+import Modal from "../components/Modal";
 
 /* ========= Image Imports ========= */
 // Straight Swords
@@ -87,7 +90,7 @@ import avelyn from "../images/weapons img/crossbows/unique/avelyn.png";
 import sorcererStaff from "../images/weapons img/staves/basic/sorcerers_staff.png";
 import medicantsStaff from "../images/weapons img/staves/unique/medicants_staff.png";
 
-// Chimes
+// Chimes / Talismans
 import clericChime from "../images/weapons img/chimes/basic/clerics_sacred_chime.png";
 import saintsTalisman from "../images/weapons img/chimes/unique/saints_talisman.png";
 
@@ -100,197 +103,415 @@ import smallShield from "../images/weapons img/shields/small/small_leather_shiel
 import kiteShield from "../images/weapons img/shields/medium/kite_shield.png";
 import greatshield from "../images/weapons img/shields/great/greatshield_of_glory.png";
 
-/* ========= Reusable Components ========= */
-const SubclassCard = ({ src, label }) => (
-  <article className="subclass-card">
-    <img src={src} alt={label} />
-    <button className="pill">{label}</button>
+/* ========= Data: weapon classes, subclasses, weapons ========= */
+/* You can expand each `weapons` array with more entries if you like */
+const weaponSections = [
+  {
+    title: "Straight Swords",
+    subclasses: [
+      {
+        id: "longsword",
+        label: "Longswords",
+        icon: longsword,
+        weapons: [
+          {
+            name: "Longsword",
+            img: longsword,
+            type: "Standard Straight Sword",
+            scaling: "STR / DEX",
+            requirements: "STR 10, DEX 10",
+            description:
+              "A well-balanced straight sword used widely by many knights. Reliable in almost any situation and a staple for many runs."
+          }
+        ]
+      },
+      {
+        id: "broadsword",
+        label: "Broadswords",
+        icon: broadsword,
+        weapons: [
+          {
+            name: "Broadsword",
+            img: broadsword,
+            type: "Slash-focused Straight Sword",
+            scaling: "STR / DEX",
+            requirements: "STR 11, DEX 10",
+            description:
+              "A heavier straight sword that emphasizes slashing attacks. It trades a bit of reach for higher raw damage."
+          }
+        ]
+      },
+      {
+        id: "shortsword",
+        label: "Shortswords",
+        icon: shortsword,
+        weapons: [
+          {
+            name: "Shortsword",
+            img: shortsword,
+            type: "Light Straight Sword",
+            scaling: "STR / DEX",
+            requirements: "STR 8, DEX 11",
+            description:
+              "A light, quick sword with shorter reach. Ideal for early-game dexterity builds and fast combos."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    title: "Greatswords",
+    subclasses: [
+      {
+        id: "claymore",
+        label: "Standard",
+        icon: claymore,
+        weapons: [
+          {
+            name: "Claymore",
+            img: claymore,
+            type: "Greatsword",
+            scaling: "STR / DEX",
+            requirements: "STR 16, DEX 13",
+            description:
+              "A legendary greatsword with sweeping and thrusting attacks. One of the most versatile weapons in the series."
+          }
+        ]
+      },
+      {
+        id: "bk-gs",
+        label: "Unique",
+        icon: blackKnightGreatsword,
+        weapons: [
+          {
+            name: "Black Knight Greatsword",
+            img: blackKnightGreatsword,
+            type: "Ultra Greatsword",
+            scaling: "STR",
+            requirements: "STR 30, DEX 18",
+            description:
+              "A massive greatsword once wielded by the Black Knights who served Gwyn. Deals bonus damage to demons."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    title: "Ultra Greatswords",
+    subclasses: [
+      {
+        id: "ultra",
+        label: "Colossal",
+        icon: ultra,
+        weapons: [
+          {
+            name: "Greatsword",
+            img: ultra,
+            type: "Ultra Greatsword",
+            scaling: "STR",
+            requirements: "STR 28, DEX 10",
+            description:
+              "An enormous slab of iron more akin to a hunk of steel than a sword. Slow, but devastating when it connects."
+          }
+        ]
+      },
+      {
+        id: "fume-ultra",
+        label: "Paired",
+        icon: fumeUltra,
+        weapons: [
+          {
+            name: "Fume Ultra Greatsword",
+            img: fumeUltra,
+            type: "Ultra Greatsword",
+            scaling: "STR",
+            requirements: "STR 50, DEX 10",
+            description:
+              "A cursed ultra greatsword with incredible weight and power. Beloved by strength builds that enjoy trading blows."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    title: "Curved Swords",
+    subclasses: [
+      {
+        id: "scimitar",
+        label: "Light",
+        icon: scimitar,
+        weapons: [
+          {
+            name: "Scimitar",
+            img: scimitar,
+            type: "Curved Sword",
+            scaling: "DEX",
+            requirements: "STR 7, DEX 13",
+            description:
+              "A light curved sword famous for its rapid slashes and flowing moveset."
+          }
+        ]
+      },
+      {
+        id: "carthus",
+        label: "Heavy",
+        icon: carthus,
+        weapons: [
+          {
+            name: "Carthus Shotel",
+            img: carthus,
+            type: "Curved Sword",
+            scaling: "DEX",
+            requirements: "STR 10, DEX 19",
+            description:
+              "A wickedly curved blade capable of striking around shields. Belongs to the swordmasters of Carthus."
+          }
+        ]
+      },
+      {
+        id: "sellsword",
+        label: "Paired",
+        icon: sellsword,
+        weapons: [
+          {
+            name: "Sellsword Twinblades",
+            img: sellsword,
+            type: "Paired Curved Swords",
+            scaling: "DEX",
+            requirements: "STR 10, DEX 16",
+            description:
+              "Dual curved swords famous for their relentless combos. A favorite for agile, aggressive builds."
+          }
+        ]
+      }
+    ]
+  },
+  // ===== You can continue the same pattern for all remaining classes =====
+  {
+    title: "Curved Greatswords",
+    subclasses: [
+      {
+        id: "exile",
+        label: "Heavy",
+        icon: exile,
+        weapons: [
+          {
+            name: "Exile Greatsword",
+            img: exile,
+            type: "Curved Greatsword",
+            scaling: "STR / DEX",
+            requirements: "STR 24, DEX 16",
+            description:
+              "A heavy curved greatsword favored by executioners. Excellent for bleed and high damage output."
+          }
+        ]
+      },
+      {
+        id: "old-wolf",
+        label: "Unique",
+        icon: oldWolf,
+        weapons: [
+          {
+            name: "Old Wolf Curved Sword",
+            img: oldWolf,
+            type: "Curved Greatsword",
+            scaling: "DEX / FTH",
+            requirements: "STR 19, DEX 25",
+            description:
+              "A relic tied to the Watchdogs of Farron. Attacking consecutively restores HP and builds a battle rhythm."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    title: "Katanas",
+    subclasses: [
+      {
+        id: "uchi",
+        label: "Standard",
+        icon: uchigatana,
+        weapons: [
+          {
+            name: "Uchigatana",
+            img: uchigatana,
+            type: "Katana",
+            scaling: "DEX",
+            requirements: "STR 11, DEX 16",
+            description:
+              "A slender katana that combines sharp cutting power with fast attacks and a deadly bleed effect."
+          }
+        ]
+      },
+      {
+        id: "black-blade",
+        label: "Unique",
+        icon: blackBlade,
+        weapons: [
+          {
+            name: "Black Blade",
+            img: blackBlade,
+            type: "Katana",
+            scaling: "STR / DEX",
+            requirements: "STR 18, DEX 18",
+            description:
+              "A shorter but heavier katana once wielded by a swordsman of legend. Hits like a truck for its size."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    title: "Pyromancies",
+    subclasses: [
+      {
+        id: "pyro-flame",
+        label: "Standard",
+        icon: pyromancerFlame,
+        weapons: [
+          {
+            name: "Pyromancer’s Parting Flame",
+            img: pyromancerFlame,
+            type: "Pyromancy Flame",
+            scaling: "INT / FTH",
+            requirements: "INT 12, FTH 12",
+            description:
+              "A pyromancy flame that scatters embers upon death. Balances power and aesthetics."
+          }
+        ]
+      },
+      {
+        id: "demons-scar",
+        label: "Unique",
+        icon: demonsScar,
+        weapons: [
+          {
+            name: "Demon’s Scar",
+            img: demonsScar,
+            type: "Pyromancy Flame / Curved Sword",
+            scaling: "INT / FTH / DEX",
+            requirements: "STR 16, DEX 17, INT 16, FTH 17",
+            description:
+              "A weapon that acts as both sword and flame catalyst. Born from a demon’s soul."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    title: "Shields",
+    subclasses: [
+      {
+        id: "small-shield",
+        label: "Small",
+        icon: smallShield,
+        weapons: [
+          {
+            name: "Small Leather Shield",
+            img: smallShield,
+            type: "Small Shield",
+            scaling: "-",
+            requirements: "STR 8, DEX 8",
+            description:
+              "A lightweight shield offering quick parries and minimal weight."
+          }
+        ]
+      },
+      {
+        id: "kite-shield",
+        label: "Medium",
+        icon: kiteShield,
+        weapons: [
+          {
+            name: "Kite Shield",
+            img: kiteShield,
+            type: "Medium Shield",
+            scaling: "-",
+            requirements: "STR 10",
+            description:
+              "A balanced shield used by many knights. Decent stability and all-round protection."
+          }
+        ]
+      },
+      {
+        id: "greatshield",
+        label: "Great",
+        icon: greatshield,
+        weapons: [
+          {
+            name: "Greatshield of Glory",
+            img: greatshield,
+            type: "Greatshield",
+            scaling: "STR",
+            requirements: "STR 32",
+            description:
+              "A titanic shield with peerless defense but extreme weight and stamina cost."
+          }
+        ]
+      }
+    ]
+  }
+];
+
+
+/* ========= Small presentational components ========= */
+
+const SubclassCard = ({ subclass, onClick }) => (
+  <article className="subclass-card" onClick={onClick}>
+    <img src={subclass.icon} alt={subclass.label} />
+    <button className="pill">{subclass.label}</button>
   </article>
 );
 
-const WeaponSection = ({ title, items }) => (
+const WeaponSection = ({ title, subclasses, onSubclassClick }) => (
   <div className="weapon-section">
-    <h2>{title}</h2>
-    <div className="scroll-gallery">
-      {items.map((it, i) => (
-        <SubclassCard key={i} src={it.src} label={it.label} />
+    <h2 className="weapon-section-title">{title}</h2>
+    <div className="weapon-scroll-row">
+      {subclasses.map((sub) => (
+        <SubclassCard
+          key={sub.id}
+          subclass={sub}
+          onClick={() => onSubclassClick(sub)}
+        />
       ))}
     </div>
   </div>
 );
 
 /* ========= Main Component ========= */
+
 const Weapons = () => {
-  const sections = [
-    {
-      title: "Straight Swords",
-      items: [
-        { label: "Longswords", src: longsword },
-        { label: "Broadswords", src: broadsword },
-        { label: "Shortswords", src: shortsword },
-      ],
-    },
-    {
-      title: "Greatswords",
-      items: [
-        { label: "Standard", src: claymore },
-        { label: "Unique", src: blackKnightGreatsword },
-      ],
-    },
-    {
-      title: "Ultra Greatswords",
-      items: [
-        { label: "Colossal", src: ultra },
-        { label: "Paired", src: fumeUltra },
-      ],
-    },
-    {
-      title: "Curved Swords",
-      items: [
-        { label: "Light", src: scimitar },
-        { label: "Heavy", src: carthus },
-        { label: "Paired", src: sellsword },
-      ],
-    },
-    {
-      title: "Curved Greatswords",
-      items: [
-        { label: "Heavy", src: exile },
-        { label: "Unique", src: oldWolf },
-      ],
-    },
-    {
-      title: "Katanas",
-      items: [
-        { label: "Standard", src: uchigatana },
-        { label: "Unique", src: blackBlade },
-      ],
-    },
-    {
-      title: "Daggers",
-      items: [
-        { label: "Standard", src: dagger },
-        { label: "Paired", src: brigand },
-        { label: "Unique", src: mailBreaker },
-      ],
-    },
-    {
-      title: "Thrusting Swords",
-      items: [
-        { label: "Standard", src: rapier },
-        { label: "Special", src: ricards },
-      ],
-    },
-    {
-      title: "Axes",
-      items: [
-        { label: "Small", src: handAxe },
-        { label: "Large", src: battleAxe },
-        { label: "Unique", src: dragonAxe },
-      ],
-    },
-    {
-      title: "Greataxes",
-      items: [
-        { label: "Standard", src: greataxe },
-        { label: "Unique", src: blackKnightGreataxe },
-      ],
-    },
-    {
-      title: "Hammers",
-      items: [
-        { label: "Standard", src: club },
-        { label: "Unique", src: warpick },
-      ],
-    },
-    {
-      title: "Greathammers",
-      items: [
-        { label: "Colossal", src: greatClub },
-        { label: "Unique", src: dragonTooth },
-      ],
-    },
-    {
-      title: "Spear & Pikes",
-      items: [
-        { label: "Spears", src: spear },
-        { label: "Pikes", src: pike },
-        { label: "Paired", src: dragonslayer },
-      ],
-    },
-    {
-      title: "Halberds",
-      items: [
-        { label: "Standard", src: halberd },
-        { label: "Special", src: glaive },
-      ],
-    },
-    {
-      title: "Reapers",
-      items: [
-        { label: "Scythes", src: greatScythe },
-        { label: "Unique", src: corvian },
-      ],
-    },
-    {
-      title: "Whips",
-      items: [
-        { label: "Standard", src: whip },
-        { label: "Unique", src: spottedWhip },
-      ],
-    },
-    {
-      title: "Fists and Claws",
-      items: [
-        { label: "Fists", src: caestus },
-        { label: "Claws", src: claw },
-      ],
-    },
-    {
-      title: "Bows",
-      items: [
-        { label: "Short", src: shortBow },
-        { label: "Long", src: longbow },
-        { label: "Great", src: dragonriderBow },
-      ],
-    },
-    {
-      title: "Crossbows",
-      items: [
-        { label: "Light", src: lightCrossbow },
-        { label: "Unique", src: avelyn },
-      ],
-    },
-    {
-      title: "Staves",
-      items: [
-        { label: "Basic", src: sorcererStaff },
-        { label: "Unique", src: medicantsStaff },
-      ],
-    },
-    {
-      title: "Chimes",
-      items: [
-        { label: "Basic", src: clericChime },
-        { label: "Unique", src: saintsTalisman },
-      ],
-    },
-    {
-      title: "Pyromancies",
-      items: [
-        { label: "Standard", src: pyromancerFlame },
-        { label: "Unique", src: demonsScar },
-      ],
-    },
-    {
-      title: "Shields",
-      items: [
-        { label: "Small", src: smallShield },
-        { label: "Medium", src: kiteShield },
-        { label: "Great", src: greatshield },
-      ],
-    },
-  ];
+  const [selectedSubclass, setSelectedSubclass] = useState(null);
+  const [selectedWeaponIndex, setSelectedWeaponIndex] = useState(0);
+
+  const openSubclassModal = (subclass) => {
+    setSelectedSubclass(subclass);
+    setSelectedWeaponIndex(0);
+  };
+
+  const closeModal = () => {
+    setSelectedSubclass(null);
+    setSelectedWeaponIndex(0);
+  };
+
+  const currentWeapon =
+    selectedSubclass?.weapons?.[selectedWeaponIndex] || null;
+
+  const goPrevWeapon = () => {
+    if (!selectedSubclass) return;
+    const len = selectedSubclass.weapons.length;
+    setSelectedWeaponIndex((prev) => (prev - 1 + len) % len);
+  };
+
+  const goNextWeapon = () => {
+    if (!selectedSubclass) return;
+    const len = selectedSubclass.weapons.length;
+    setSelectedWeaponIndex((prev) => (prev + 1) % len);
+  };
+
+  const selectWeaponByIndex = (index) => {
+    setSelectedWeaponIndex(index);
+  };
 
   return (
     <section className="page">
@@ -299,11 +520,92 @@ const Weapons = () => {
 
       <div className="weapon-container">
         <div className="weapon-sections">
-          {sections.map((s, i) => (
-            <WeaponSection key={i} title={s.title} items={s.items} />
+          {weaponSections.map((section) => (
+            <WeaponSection
+              key={section.title}
+              title={section.title}
+              subclasses={section.subclasses}
+              onSubclassClick={openSubclassModal}
+            />
           ))}
         </div>
       </div>
+
+      {/* Modal for multi-weapon view inside a subclass */}
+      <Modal
+        isOpen={!!selectedSubclass}
+        onClose={closeModal}
+        title={selectedSubclass?.label}
+      >
+        {selectedSubclass && currentWeapon && (
+          <div>
+            {/* Icon of the selected weapon */}
+            <img
+              className="weapon-modal-icon"
+              src={currentWeapon.img}
+              alt={currentWeapon.name}
+            />
+
+            {/* Pills to jump between weapons in this subclass */}
+            <div className="weapon-modal-selector">
+              {selectedSubclass.weapons.map((w, index) => (
+                <button
+                  key={w.name}
+                  className={
+                    index === selectedWeaponIndex
+                      ? "weapon-pill weapon-pill-active"
+                      : "weapon-pill"
+                  }
+                  onClick={() => selectWeaponByIndex(index)}
+                >
+                  {w.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Prev / Next controls */}
+            {selectedSubclass.weapons.length > 1 && (
+              <div className="weapon-modal-nav">
+                <button onClick={goPrevWeapon}>⟵ Previous</button>
+                <span>
+                  {selectedWeaponIndex + 1} /{" "}
+                  {selectedSubclass.weapons.length}
+                </span>
+                <button onClick={goNextWeapon}>Next ⟶</button>
+              </div>
+            )}
+
+            {/* Weapon details */}
+            <ul className="weapon-modal-details">
+              <li>
+                <strong>Name:</strong> {currentWeapon.name}
+              </li>
+              {currentWeapon.type && (
+                <li>
+                  <strong>Type:</strong> {currentWeapon.type}
+                </li>
+              )}
+              {currentWeapon.scaling && (
+                <li>
+                  <strong>Scaling:</strong> {currentWeapon.scaling}
+                </li>
+              )}
+              {currentWeapon.requirements && (
+                <li>
+                  <strong>Requirements:</strong>{" "}
+                  {currentWeapon.requirements}
+                </li>
+              )}
+            </ul>
+
+            {currentWeapon.description && (
+              <p className="weapon-modal-notes">
+                {currentWeapon.description}
+              </p>
+            )}
+          </div>
+        )}
+      </Modal>
     </section>
   );
 };

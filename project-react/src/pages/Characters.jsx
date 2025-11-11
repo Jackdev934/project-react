@@ -1,212 +1,137 @@
 // src/pages/Characters.jsx
+import { useState, useEffect } from "react";
 import "../css/Characters.css";
 import ImageGrid from "../components/Image Grid";
+import Modal from "../components/Modal";
 
-import andre from "../images/character images/andre.jpeg";
-import firekeeper from "../images/character images/fire.jpeg";
-import leonhard from "../images/character images/ringfinger.jpeg";
-import ludleth from "../images/character images/ludleth.jpeg";
-import pickle from "../images/character images/pickle.jpeg";
-import shrine from "../images/character images/shrine.jpeg";
-import sirris from "../images/character images/sirris.jpeg";
-import yuria from "../images/character images/yuria.jpeg";
-import greirat from "../images/character images/greirat.jpeg";
-import emma from "../images/character images/emma.jpeg";
-import lion from "../images/character images/lion.jpeg";
-import yoel from "../images/character images/yoel.jpeg";
-import cornyx from "../images/character images/cornyx.jpeg";
-import siegward from "../images/character images/siegward.jpeg";
-import irina from "../images/character images/irina.jpeg";
-import eygon from "../images/character images/eygon.jpeg";
-import velka from "../images/character images/velka.jpeg";
-import hodrick from "../images/character images/holy.jpeg";
-import giant from "../images/character images/giant.jpeg";
-import orbeck from "../images/character images/orbeck.jpeg";
-import anri from "../images/character images/anri.jpeg";
-import horace from "../images/character images/horace.jpeg";
-import rosaria from "../images/character images/rosaria.jpeg";
-import patches from "../images/character images/patches.jpeg";
-import gael from "../images/character images/gael.jpeg";
-import kirk from "../images/character images/kirk.jpeg";
-import hawkwood from "../images/character images/hawkwood.jpeg";
-import wolf from "../images/character images/wolf.jpeg";
-import yellowfinger from "../images/character images/yellowfinger.jpeg";
-import slayer from "../images/character images/slayer.jpeg";
-import cuculus from "../images/character images/cuculus.jpeg";
-import alva from "../images/character images/alva.jpeg";
-import archdeacon from "../images/character images/archdeacon.jpeg";
-import creighton from "../images/character images/creighton.jpeg";
-import londor from "../images/character images/londor.jpeg";
-import karla from "../images/character images/karla.jpeg";
-import company from "../images/character images/company.jpeg";
-import gotthard from "../images/character images/gotthard.jpeg";
-import kamui from "../images/character images/kamui.jpeg";
-import daughter from "../images/character images/daughter.jpeg";
-import friede from "../images/character images/friede.jpeg";
-import sir from "../images/character images/sir.jpeg";
-import settler from "../images/character images/settler.jpeg";
-import painting from "../images/character images/painting.jpeg";
-import livid from "../images/character images/livid.jpeg";
-import hag from "../images/character images/hag.jpeg";
-import lapp from "../images/character images/lapp.jpeg";
-import shira from "../images/character images/shira.jpeg";
-import preacher from "../images/character images/preacher.jpeg";
-import argo from "../images/character images/argo.jpeg";
-import filianore from "../images/character images/filianore.jpeg";
-import moaning from "../images/character images/moaning.jpeg";
-import hollow from "../images/character images/hollow.jpeg";
-import ledo from "../images/character images/ledo.jpeg";
-
-const sections = [
-  {
-    title: "Firelink Shrine",
-    items: [
-      { name: "Blacksmith Andre", src: andre },
-      { name: "Fire Keeper", src: firekeeper },
-      { name: "Leonhard the Ringfinger", src: leonhard },
-      { name: "Ludleth of Courland", src: ludleth },
-      { name: "Picklepum the Crow", src: pickle },
-      { name: "Shrine Handmaid", src: shrine },
-      { name: "Sirris of the Sunless Realms", src: sirris },
-      { name: "Yuria of Londor", src: yuria },
-    ],
-  },
-  {
-    title: "High Wall of Lothric",
-    items: [
-      { name: "Greirat of the Undead Settlement", src: greirat },
-      { name: "Emma, High Priestess of Lothric Castle", src: emma },
-      { name: "Lion Knight Albert", src: lion },
-    ],
-  },
-  {
-    title: "Undead Settlement",
-    items: [
-      { name: "Yoel of Londor", src: yoel },
-      { name: "Cornyx of the Great Swamp", src: cornyx },
-      { name: "Siegward of Catarina", src: siegward },
-      { name: "Irina of Carim", src: irina },
-      { name: "Eygon of Carim", src: eygon },
-      { name: "Velka the Goddess of Sin", src: velka },
-      { name: "Holy Knight Hodrick", src: hodrick },
-      { name: "Giant of the Undead Settlement", src: giant },
-    ],
-  },
-  {
-    title: "Road of Sacrifices",
-    items: [
-      { name: "Orbeck of Vinheim", src: orbeck },
-      { name: "Anri of Astora", src: anri },
-      { name: "Horace the Hushed", src: horace },
-    ],
-  },
-  {
-    title: "Cathedral of the Deep",
-    items: [
-      { name: "Rosaria, Mother of Rebirth", src: rosaria },
-      { name: "Unbreakable Patches", src: patches },
-      { name: "Slave Knight Gael", src: gael },
-      { name: "Longfinger Kirk", src: kirk },
-    ],
-  },
-  {
-    title: "Farron Keep",
-    items: [
-      { name: "Hawkwood", src: hawkwood },
-      { name: "Old Wolf of Farron", src: wolf },
-      { name: "Yellowfinger Heysel", src: yellowfinger },
-    ],
-  },
-  {
-    title: "Smouldering Lake",
-    items: [
-      { name: "Knight Slayer Tsorig", src: slayer },
-      { name: "Great Swamp Cuculus", src: cuculus },
-    ],
-  },
-  {
-    title: "Irithyll of the Boreal Valley",
-    items: [
-      { name: "Alva, Seeker of the Spurned", src: alva },
-      { name: "Archdeacon McDonnell", src: archdeacon },
-      { name: "Creighton the Wanderer", src: creighton },
-      { name: "Londor Pale Shade", src: londor },
-    ],
-  },
-  { title: "Irithyll Dungeon", items: [{ name: "Karla", src: karla }] },
-  { title: "Anor Londo",       items: [{ name: "Company Captain Yorshka", src: company }] },
-  {
-    title: "Grand Archives",
-    items: [
-      { name: "Black Hand Gotthard", src: gotthard },
-      { name: "Black Hand Kamui",    src: kamui },
-      { name: "Daughter of Crystal Kriemhild", src: daughter },
-    ],
-  },
-  {
-    title: "Painted World of Ariandel",
-    items: [
-      { name: "Sister Friede", src: friede },
-      { name: "Sir Vilhelm",   src: sir },
-      { name: "Corvian Settler", src: settler },
-      { name: "Painting Woman",  src: painting },
-      { name: "Livid Pyromancer Dunnel", src: livid },
-    ],
-  },
-  { title: "Dreg Heap",     items: [{ name: "Stone-humped Hag", src: hag }, { name: "Lapp", src: lapp }] },
-  {
-    title: "The Ringed City",
-    items: [
-      { name: "Shira", src: shira },
-      { name: "Locust Preacher", src: preacher },
-      { name: "Judicator Argo",  src: argo },
-      { name: "Filianore",       src: filianore },
-      { name: "Moaning Knight",  src: moaning },
-      { name: "Ringed City Hollow", src: hollow },
-      { name: "Silver Knight Ledo", src: ledo },
-    ],
-  },
-];
+// Helper to build a full URL from backend paths like "/images/characters/andre.jpeg"
+const buildImgUrl = (img) => {
+  if (!img) return null;
+  if (img.startsWith("http://") || img.startsWith("https://")) return img;
+  if (img.startsWith("/")) return `http://localhost:3001${img}`;
+  return `http://localhost:3001/${img}`;
+};
 
 const Characters = () => {
+  const [sections, setSections] = useState([]);
+  const [selectedChar, setSelectedChar] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchCharacters = async () => {
+      try {
+        console.log("Fetching characters from backend...");
+        const res = await fetch("http://localhost:3001/api/characters");
+
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+
+        const data = await res.json();
+        console.log("Characters API response:", data);
+
+        // Attach primary image URL + some helpful fields
+        const withImages = data.map((char) => ({
+          ...char,
+          src: buildImgUrl(char.imgs?.[0]),
+          alt: char.name,
+          label: char.name,
+        }));
+
+        console.log("Characters after adding images:", withImages);
+
+        // Group by area (Firelink Shrine, Undead Settlement, etc.)
+        const byArea = {};
+        for (const char of withImages) {
+          const area = char.area || "Other";
+          if (!byArea[area]) byArea[area] = [];
+          byArea[area].push(char);
+        }
+
+        const newSections = Object.keys(byArea).map((area) => ({
+          title: area,
+          items: byArea[area],
+        }));
+
+        console.log("Final sections for Characters page:", newSections);
+
+        setSections(newSections);
+        setError("");
+      } catch (err) {
+        console.error("Error fetching characters:", err);
+        setError("Failed to load character data from the server.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCharacters();
+  }, []);
+
+  const handleItemClick = (item) => {
+    setSelectedChar(item);
+  };
+
+  const closeModal = () => setSelectedChar(null);
+
   return (
     <section className="page">
       <h2>Characters</h2>
-      <main>
-        {sections.map((section, idx) => {
-          // map section.items -> ImageGrid `items` shape
-          const gridItems = section.items.map(({ name, src }) => ({
-            src,
-            alt: name,
-            label: name,
-          }));
 
-          return (
+      {isLoading && <p>Loading characters...</p>}
+      {error && <p className="error-text">{error}</p>}
+
+      {!isLoading && !error && sections.length === 0 && (
+        <p>No character data found from the server.</p>
+      )}
+
+      {!isLoading && !error && sections.length > 0 && (
+        <main>
+          {sections.map((section, idx) => (
             <div key={idx}>
               <h2 className="boss-title">{section.title}:</h2>
               <div className="container band-dark">
                 <ImageGrid
-                  items={gridItems}
+                  items={section.items}
                   wrapperClass="grid grid-4 character-grid"
                   imgClass="art-img"
-                  // Use a custom renderer so we keep your existing .char-card + .pill structure
-                  renderItem={(item, i) => (
-                    <article key={`${section.title}-${i}`} className="char-card">
-                      <img
-                        src={item.src}
-                        alt={item.alt}
-                        className="art-img"
-                        loading="lazy"
-                      />
-                      <button className="pill">{item.label}</button>
-                    </article>
-                  )}
+                  onItemClick={handleItemClick}
                 />
               </div>
             </div>
-          );
-        })}
-      </main>
+          ))}
+        </main>
+      )}
+
+      {/* Modal for character details */}
+      <Modal
+        isOpen={!!selectedChar}
+        onClose={closeModal}
+        title={selectedChar?.name || ""}
+      >
+        {selectedChar && (
+          <div className="character-modal-content boss-modal-content">
+            {selectedChar.src && (
+              <img
+                className="boss-modal-main-img"
+                src={selectedChar.src}
+                alt={selectedChar.name}
+              />
+            )}
+
+            {selectedChar.area && (
+              <p>
+                <strong>Area:</strong> {selectedChar.area}
+              </p>
+            )}
+
+            {selectedChar.text && (
+              <p className="boss-modal-text">{selectedChar.text}</p>
+            )}
+          </div>
+        )}
+      </Modal>
     </section>
   );
 };

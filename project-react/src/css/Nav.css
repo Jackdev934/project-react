@@ -1,142 +1,171 @@
-/* Global nav container */
-#main-nav {
-  background: var(--surface, #11161c);
-  border-bottom: 1px solid var(--border, #2a2f36);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-  position: sticky;            
+/* ================================
+   GLOBAL NAV WRAPPER
+   ================================ */
+
+.top-nav {
+  position: sticky;
   top: 0;
-  z-index: 1000;
-}
-
-/* Toggle (hamburger/close) button*/
-#toggle-nav {
-  display: flex;                   
-  justify-content: center;         
-  align-items: center;             
+  z-index: 1000; /* below modal (5000), above content */
+  background: #0f1116;
   width: 100%;
-  height: 60px;                   
-  background: var(--panel-alt, #181c22);
-  color: var(--text, #ffffff);
-  font-size: 2rem;                 
-  border: none;
-  border-bottom: 1px solid var(--border, #2a2f36);
+}
+
+/* ================================
+   BASE NAV LAYOUT
+   ================================ */
+
+#main-nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ================================
+   HAMBURGER ICON (CENTERED + STYLED)
+   ================================ */
+
+#toggle-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  width: 42px;
+  border-radius: 6px;
+  background: transparent;
+  color: #f5f5f5;
+  font-size: 1.6rem;
   cursor: pointer;
-  appearance: none;
-  transition: color 0.3s ease, background-color 0.3s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-#toggle-nav:hover,
-#toggle-nav:focus {
-  color: var(--accent, #73000A);
-  background: rgba(0, 0, 0, 0.25);
+#toggle-nav:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
 }
 
-#toggle-nav:focus-visible {
-  outline: 2px solid var(--accent, #73000A);
-  outline-offset: 2px;
+/* Center the icon horizontally in the header area */
+.top-nav {
+  text-align: center;
 }
 
-#main-nav ul#nav-list {
+#toggle-nav {
+  margin: 0 auto;
+}
+
+/* ================================
+   NAV LINKS
+   ================================ */
+
+#nav-list {
+  list-style: none;
   margin: 0;
   padding: 0;
-  list-style: none;
 }
 
-#main-nav .hide-small {
-  display: none;
+#nav-list li {
+  margin: 0;
+  padding: 0;
 }
 
-#main-nav li {
-  list-style-type: none;
-  border-bottom: 1px solid var(--border, #2a2f36);
-  background: var(--panel-alt, #181c22);
-}
-
-#main-nav li:last-child {
-  border-bottom: 0;
-}
-
-/* Links inside items */
-#main-nav li > a {
+#nav-list li > a {
   display: block;
-  padding: 12px 16px;
   text-decoration: none;
-  color: var(--text, #ffffff);
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  color: #f5f5f5;
+  font-size: 0.95rem;
 }
 
-#main-nav li > a:hover,
-#main-nav li > a:focus {
-  color: var(--accent, #73000A);
+#nav-list li > a:hover,
+#nav-list li > a:focus {
+  color: var(--accent, #c59a38);
 }
 
-#main-nav li > a:focus-visible {
-  outline: 2px solid var(--accent, #73000A);
-  outline-offset: 2px;
+#nav-list li > a.active {
+  color: var(--accent, #c59a38);
 }
 
-#main-nav a.active {
-  color: var(--accent, #73000A);
-  border-left: 3px solid var(--accent, #73000A);
-  background: color-mix(in oklab, var(--panel-alt, #181c22) 80%, var(--accent, #73000A) 20%);
+/* ================================
+   MOBILE FIRST (phones & small tablets)
+   ================================ */
+
+@media (max-width: 767px) {
+  /* Show hamburger */
+  #toggle-nav {
+    display: block;
+  }
+
+  /* Vertical collapsible menu */
+  #nav-list {
+    display: flex;
+    flex-direction: column;
+    background: #111318;
+    overflow: hidden;
+    max-height: 600px; /* visible */
+    transition: max-height 220ms ease;
+    width: 100%;
+  }
+
+  #nav-list.hide-small {
+    max-height: 0;
+  }
+
+  #nav-list li > a {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+    border-top: 1px solid #2a2f36;
+  }
 }
 
+/* ================================
+   DESKTOP VIEW (>= 768px)
+   ================================ */
 
-@media screen and (min-width: 768px) {
-  /* Hide the hamburger on larger screens */
+@media (min-width: 768px) {
+  /* Hide hamburger */
   #toggle-nav {
     display: none;
   }
 
-  /* Always show the menu row on desktop */
-  #main-nav .hide-small {
+  /* Row layout for desktop */
+  #main-nav {
+    justify-content: center;
+  }
+
+  #nav-list {
     display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    max-height: none;
   }
 
-  #main-nav ul#nav-list {
-    display: flex;
-    align-items: center;
-    gap: 0; 
+  #nav-list.hide-small {
+    max-height: none;
   }
 
-  #main-nav li {
-    border-bottom: 0;
-    background: transparent;
+  #nav-list li > a {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 2px solid transparent;
   }
 
-  #main-nav li {
-    flex: 1 1 auto;
+  #nav-list li > a:hover,
+  #nav-list li > a:focus {
+    border-bottom-color: var(--accent, #c59a38);
   }
 
-  #main-nav li > a {
-    padding: 14px 16px;
-    border-bottom: 3px solid transparent;
-    border-left: none; 
-  }
-
-  #main-nav li > a:hover,
-  #main-nav li > a:focus {
-    background: transparent;
-    color: var(--accent, #73000A);
-    border-bottom-color: var(--accent, #73000A);
-  }
-
-  #main-nav a.active {
-    background: transparent;
-    border-bottom-color: var(--accent, #73000A);
-    color: var(--accent, #73000A);
+  #nav-list li > a.active {
+    border-bottom-color: var(--accent, #c59a38);
   }
 }
 
-@media (max-width: 767.98px) {
-  #main-nav ul#nav-list {
-    overflow: hidden;
-    transition: max-height 220ms ease;
-    max-height: 800px; 
-  }
-  #main-nav .hide-small {
-    max-height: 0;
+/* ================================
+   ULTRA-WIDE (>= 1440px)
+   ================================ */
+
+@media (min-width: 1440px) {
+  #nav-list li > a {
+    font-size: 1.05rem;
+    padding: 0.9rem 1.6rem;
   }
 }

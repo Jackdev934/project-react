@@ -1,104 +1,129 @@
-// src/pages/World.jsx
+// src/pages/Worlds.jsx
+import { useState, useEffect } from "react";
 import "../css/World.css";
 import ImageGrid from "../components/Image Grid";
+import Modal from "../components/Modal";
 
-/* ========= Image Imports ========= */
-import firelink from "../images/world images/firelink.jpeg";
-import cemetary from "../images/world images/cemetary.jpeg";
-import lothric from "../images/world images/lotheric.jpeg";
-import undead from "../images/world images/undead.jpeg";
-import sacrifices from "../images/world images/sacrifices.jpeg";
-import cathedral from "../images/world images/cathedral.jpeg";
-import farron from "../images/world images/farron.jpeg";
-import catacombs from "../images/world images/catacombs.jpeg";
-import smouldering from "../images/world images/smouldering.jpeg";
-import boreal from "../images/world images/boreal.jpeg";
-import dungeon from "../images/world images/dungeon.jpeg";
-import profaned from "../images/world images/profaned.jpeg";
-import anor from "../images/world images/anor.jpeg";
-import castle from "../images/world images/castle.jpeg";
-import consumed from "../images/world images/consumed.jpeg";
-import archives from "../images/world images/archives.jpeg";
-import kiln from "../images/world images/kiln.jpeg";
+const buildImgUrl = (img) => {
+  if (!img) return null;
+  if (img.startsWith("http://") || img.startsWith("https://")) return img;
+  if (img.startsWith("/")) return `http://localhost:3001${img}`;
+  return `http://localhost:3001/${img}`;
+};
 
-import painted from "../images/world images/painted.jpeg";
-import dreg from "../images/world images/dreg.jpeg";
-import ring from "../images/world images/ring.jpeg";
+const Worlds = () => {
+  const [worlds, setWorlds] = useState([]);
+  const [selectedWorld, setSelectedWorld] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
-/* ========= Data ========= */
-const mainLocations = [
-  { name: "Firelink Shrine", src: firelink },
-  { name: "Cemetery of Ash", src: cemetary },
-  { name: "High Wall of Lothric", src: lothric },
-  { name: "Undead Settlement", src: undead },
-  { name: "Road of Sacrifices", src: sacrifices },
-  { name: "Cathedral of the Deep", src: cathedral },
-  { name: "Farron Keep", src: farron },
-  { name: "Catacombs of Carthus", src: catacombs },
-  { name: "Smouldering Lake", src: smouldering },
-  { name: "Irithyll of the Boreal Valley", src: boreal },
-  { name: "Irithyll Dungeon", src: dungeon },
-  { name: "Profaned Capital", src: profaned },
-  { name: "Anor Londo", src: anor },
-  { name: "Lothric Castle", src: castle },
-  { name: "Consumed King’s Garden", src: consumed },
-  { name: "Grand Archives", src: archives },
-  { name: "Kiln of the First Flame", src: kiln },
-];
+  useEffect(() => {
+    const fetchWorlds = async () => {
+      try {
+        console.log("🌐 Fetching worlds from backend...");
+        const res = await fetch("http://localhost:3001/api/worlds");
 
-const dlcLocations = [
-  { name: "Painted World of Ariandel", src: painted },
-  { name: "The Dreg Heap",            src: dreg },
-  { name: "The Ringed City",          src: ring },
-];
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
 
-/* ========= Component ========= */
-const World = () => {
+        const data = await res.json();
+        console.log("✅ Worlds API response:", data);
+
+        const withImages = data.map((world) => {
+          const src = buildImgUrl(world.imgs?.[0]);
+          console.log(`🖼 World "${world.name}" image src:`, src);
+          return {
+            ...world,
+            src,
+            alt: world.name,
+            label: world.name,
+          };
+        });
+
+        setWorlds(withImages);
+        setError("");
+      } catch (err) {
+        console.error("❌ Error fetching worlds:", err);
+        setError("Failed to load world data from the server.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchWorlds();
+  }, []);
+
+  const handleItemClick = (item) => setSelectedWorld(item);
+  const closeModal = () => setSelectedWorld(null);
+
+  const mainWorlds = worlds.filter((w) => !w.isDlc);
+  const dlcWorlds = worlds.filter((w) => w.isDlc);
+
   return (
     <section className="page">
-      <h2>World Locations</h2>
+      <h2>Worlds</h2>
 
-      <h2 className="boss-title">Main Story Locations</h2>
-      <div className="container band-dark">
-        <ImageGrid
-          items={mainLocations.map(({ name, src }) => ({
-            src,
-            alt: name,
-            label: name,
-          }))}
-          /* Use 4-up grid by default; change to grid-3 if you prefer */
-          wrapperClass="grid grid-4 gap-lg world-grid"
-          imgClass="art-img"
-          /* Keep your existing markup for styling */
-          renderItem={(item, i) => (
-            <article key={`main-${i}`} className="place-card" data-place={item.label}>
-              <img src={item.src} alt={item.alt} className="art-img" loading="lazy" />
-              <button className="pill">{item.label}</button>
-            </article>
-          )}
-        />
-      </div>
+      {isLoading && <p>Loading worlds...</p>}
+      {error && <p className="error-text">{error}</p>}
 
-      <h2 className="boss-title">DLC Locations</h2>
-      <div className="container band-dark">
-        <ImageGrid
-          items={dlcLocations.map(({ name, src }) => ({
-            src,
-            alt: name,
-            label: name,
-          }))}
-          wrapperClass="grid grid-4 gap-lg world-grid"
-          imgClass="art-img"
-          renderItem={(item, i) => (
-            <article key={`dlc-${i}`} className="place-card" data-place={item.label}>
-              <img src={item.src} alt={item.alt} className="art-img" loading="lazy" />
-              <button className="pill">{item.label}</button>
-            </article>
-          )}
-        />
-      </div>
+      {!isLoading && !error && worlds.length === 0 && (
+        <p>No worlds data found from the server.</p>
+      )}
+
+      {!isLoading && !error && worlds.length > 0 && (
+        <>
+          <h2 className="boss-title">Main Game Areas:</h2>
+          <div className="container band-dark">
+            <ImageGrid
+              items={mainWorlds}
+              wrapperClass="grid grid-4 boss-grid"
+              imgClass="art-img"
+              onItemClick={handleItemClick}
+            />
+          </div>
+
+          <h2 className="boss-title">DLC Areas:</h2>
+          <div className="container band-dark">
+            <ImageGrid
+              items={dlcWorlds}
+              wrapperClass="grid grid-4 boss-grid"
+              imgClass="art-img"
+              onItemClick={handleItemClick}
+            />
+          </div>
+        </>
+      )}
+
+      <Modal
+        isOpen={!!selectedWorld}
+        onClose={closeModal}
+        title={selectedWorld?.name || ""}
+      >
+        {selectedWorld && (
+          <div className="boss-modal-content">
+            {selectedWorld.src && (
+              <>
+                <img
+                  className="boss-modal-main-img"
+                  src={selectedWorld.src}
+                  alt={selectedWorld.name}
+                />
+                {/* Debug: show URL under the image temporarily */}
+                <p style={{ fontSize: "0.75rem", wordBreak: "break-all" }}>
+                  Image URL: {selectedWorld.src}
+                </p>
+              </>
+            )}
+
+            {selectedWorld.text && (
+              <p className="boss-modal-text">{selectedWorld.text}</p>
+            )}
+          </div>
+        )}
+      </Modal>
     </section>
   );
 };
 
-export default World;
+export default Worlds;
