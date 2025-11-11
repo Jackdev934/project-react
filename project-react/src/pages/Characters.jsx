@@ -9,8 +9,8 @@ import BACKEND_URL from "../config";
 const buildImgUrl = (img) => {
   if (!img) return null;
   if (img.startsWith("http://") || img.startsWith("https://")) return img;
-  if (img.startsWith("/")) return `${BACKEND_URL}${img}`;
-  return `${BACKEND_URL}/${img}`;
+  if (img.startsWith("/")) return `https://project-backend-fl7h.onrender.com${img}`;
+  return `https://project-backend-fl7h.onrender.com/${img}`;
 };
 
 const Characters = () => {
@@ -23,7 +23,7 @@ const Characters = () => {
     const fetchCharacters = async () => {
       try {
         console.log("Fetching characters from backend...");
-        const res = await fetch(`${BACKEND_URL}/api/characters`);
+        const res = await fetch(`https://project-backend-fl7h.onrender.com/api/characters`);
 
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);

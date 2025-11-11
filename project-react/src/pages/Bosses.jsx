@@ -9,8 +9,8 @@ import BACKEND_URL from "../config";
 const buildImgUrl = (img) => {
   if (!img) return null;
   if (img.startsWith("http://") || img.startsWith("https://")) return img;
-  if (img.startsWith("/")) return `${BACKEND_URL}${img}`;
-  return `${BACKEND_URL}/${img}`;
+  if (img.startsWith("/")) return `https://project-backend-fl7h.onrender.com${img}`;
+  return `https://project-backend-fl7h.onrender.com${img}`;
 };
 
 const Bosses = () => {
@@ -22,7 +22,7 @@ const Bosses = () => {
   useEffect(() => {
     const fetchBosses = async () => {
       try {
-        const res = await fetch(`${BACKEND_URL}/api/bosses`);
+        const res = await fetch(`https://project-backend-fl7h.onrender.com/api/bosses`);
 
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);

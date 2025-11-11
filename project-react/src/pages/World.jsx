@@ -8,8 +8,8 @@ import BACKEND_URL from "../config";
 const buildImgUrl = (img) => {
   if (!img) return null;
   if (img.startsWith("http://") || img.startsWith("https://")) return img;
-  if (img.startsWith("/")) return `${BACKEND_URL}${img}`;
-  return `${BACKEND_URL}/${img}`;
+  if (img.startsWith("/")) return `https://project-backend-fl7h.onrender.com${img}`;
+  return `https://project-backend-fl7h.onrender.com/${img}`;
 };
 
 const Worlds = () => {
@@ -22,7 +22,7 @@ const Worlds = () => {
     const fetchWorlds = async () => {
       try {
         console.log("Fetching worlds from backend...");
-        const res = await fetch(`${BACKEND_URL}/api/worlds`);
+        const res = await fetch(`https://project-backend-fl7h.onrender.com/api/worlds`);
 
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);
