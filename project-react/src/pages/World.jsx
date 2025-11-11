@@ -7,8 +7,8 @@ import Modal from "../components/Modal";
 const buildImgUrl = (img) => {
   if (!img) return null;
   if (img.startsWith("http://") || img.startsWith("https://")) return img;
-  if (img.startsWith("/")) return `http://localhost:3001${img}`;
-  return `http://localhost:3001/${img}`;
+  if (img.startsWith("/")) return `https://project-backend-fl7h.onrender.com${img}`;
+  return `https://project-backend-fl7h.onrender.com/${img}`;
 };
 
 const Worlds = () => {

@@ -4,21 +4,13 @@ import "./../css/Bosses.css";
 import ImageGrid from "../components/Image Grid";
 import Modal from "../components/Modal";
 
-// 🔑 1) Set this to your Render backend URL
-// Example: "https://dark-souls-api.onrender.com"
-const API_BASE_URL = "https://your-backend-name.onrender.com";
+// Helper to build image URLs (update base URL for deployed backend)
+const API_BASE_URL = "https://project-backend-fl7h.onrender.com"; // ← replace with your Render backend URL
 
-// 🔧 2) Helper to build full image URLs from backend paths
 const buildImgUrl = (img) => {
   if (!img) return null;
-
-  // If the backend already gives a full URL, just use it
   if (img.startsWith("http://") || img.startsWith("https://")) return img;
-
-  // If backend sends "/images/whatever.jpg"
   if (img.startsWith("/")) return `${API_BASE_URL}${img}`;
-
-  // Fallback: treat as relative to backend root
   return `${API_BASE_URL}/${img}`;
 };
 
@@ -31,8 +23,7 @@ const Bosses = () => {
   useEffect(() => {
     const fetchBosses = async () => {
       try {
-        // ⬇️ 3) Use Render API instead of localhost
-        const res = await fetch("https://project-backend-fl7h.onrender.com/api/bosses");
+        const res = await fetch(`${API_BASE_URL}/api/bosses`);
 
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);
@@ -40,7 +31,6 @@ const Bosses = () => {
 
         const data = await res.json();
 
-        // Attach image URLs & alt/label fields
         const withImages = data.map((boss) => ({
           ...boss,
           src: buildImgUrl(boss.imgs?.[0]),
