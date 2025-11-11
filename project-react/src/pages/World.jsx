@@ -20,19 +20,19 @@ const Worlds = () => {
   useEffect(() => {
     const fetchWorlds = async () => {
       try {
-        console.log("🌐 Fetching worlds from backend...");
-        const res = await fetch("http://localhost:3001/api/worlds");
+        console.log("Fetching worlds from backend...");
+        const res = await fetch("https://project-backend-fl7h.onrender.com/api/worlds");
 
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);
         }
 
         const data = await res.json();
-        console.log("✅ Worlds API response:", data);
+        console.log(" Worlds API response:", data);
 
         const withImages = data.map((world) => {
           const src = buildImgUrl(world.imgs?.[0]);
-          console.log(`🖼 World "${world.name}" image src:`, src);
+          console.log(`World "${world.name}" image src:`, src);
           return {
             ...world,
             src,
@@ -44,7 +44,7 @@ const Worlds = () => {
         setWorlds(withImages);
         setError("");
       } catch (err) {
-        console.error("❌ Error fetching worlds:", err);
+        console.error("Error fetching worlds:", err);
         setError("Failed to load world data from the server.");
       } finally {
         setIsLoading(false);

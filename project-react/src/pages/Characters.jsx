@@ -22,7 +22,7 @@ const Characters = () => {
     const fetchCharacters = async () => {
       try {
         console.log("Fetching characters from backend...");
-        const res = await fetch("http://localhost:3001/api/characters");
+        const res = await fetch("https://project-backend-fl7h.onrender.com/api/characters");
 
         if (!res.ok) {
           throw new Error(`Server responded with status ${res.status}`);
