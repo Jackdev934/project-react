@@ -1,11 +1,10 @@
-// src/pages/Characters.jsx
+
 import { useState, useEffect } from "react";
 import "../css/Characters.css";
 import ImageGrid from "../components/Image Grid";
 import Modal from "../components/Modal";
 import BACKEND_URL from "../config";
 
-// Helper to build a full URL from backend paths like "/images/characters/andre.jpeg"
 const buildImgUrl = (img) => {
   if (!img) return null;
   if (img.startsWith("http://") || img.startsWith("https://")) return img;
@@ -32,7 +31,6 @@ const Characters = () => {
         const data = await res.json();
         console.log("Characters API response:", data);
 
-        // Attach primary image URL + some helpful fields
         const withImages = data.map((char) => ({
           ...char,
           src: buildImgUrl(char.imgs?.[0]),
@@ -42,7 +40,6 @@ const Characters = () => {
 
         console.log("Characters after adding images:", withImages);
 
-        // Group by area (Firelink Shrine, Undead Settlement, etc.)
         const byArea = {};
         for (const char of withImages) {
           const area = char.area || "Other";
@@ -105,7 +102,6 @@ const Characters = () => {
         </main>
       )}
 
-      {/* Modal for character details */}
       <Modal
         isOpen={!!selectedChar}
         onClose={closeModal}

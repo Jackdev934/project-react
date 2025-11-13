@@ -1,9 +1,9 @@
-// src/pages/Weapons.jsx
+
 import { useState } from "react";
 import "../css/Weapons.css";
 import Modal from "../components/Modal";
 
-/* ========= Image Imports ========= */
+
 // Straight Swords
 import longsword from "../images/weapons img/straight-swords/longswords/longsword.png";
 import broadsword from "../images/weapons img/straight-swords/broadswords/broadsword.png";
@@ -103,8 +103,6 @@ import smallShield from "../images/weapons img/shields/small/small_leather_shiel
 import kiteShield from "../images/weapons img/shields/medium/kite_shield.png";
 import greatshield from "../images/weapons img/shields/great/greatshield_of_glory.png";
 
-/* ========= Data: weapon classes, subclasses, weapons ========= */
-/* You can expand each `weapons` array with more entries if you like */
 const weaponSections = [
   {
     title: "Straight Swords",
@@ -286,7 +284,7 @@ const weaponSections = [
       }
     ]
   },
-  // ===== You can continue the same pattern for all remaining classes =====
+
   {
     title: "Curved Greatswords",
     subclasses: [

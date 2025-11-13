@@ -1,11 +1,10 @@
-// src/pages/Bosses.jsx
+
 import { useState, useEffect } from "react";
 import "./../css/Bosses.css";
 import ImageGrid from "../components/Image Grid";
 import Modal from "../components/Modal";
 import BACKEND_URL from "../config";
 
-// Build full URL for image (works with /images/... from backend)
 const buildImgUrl = (img) => {
   if (!img) return null;
   if (img.startsWith("http://") || img.startsWith("https://")) return img;

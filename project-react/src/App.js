@@ -1,4 +1,3 @@
-// src/App.js
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
@@ -41,7 +40,6 @@ function Layout() {
 }
 
 export default function App() {
-  // IMPORTANT: basename is just the PATH, not the full URL
   const basename =
     process.env.NODE_ENV === "production"
       ? "/csce242/project-react"
