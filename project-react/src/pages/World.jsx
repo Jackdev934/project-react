@@ -8,7 +8,7 @@ import BACKEND_URL from "../config";
 const buildImgUrl = (img) => {
   if (!img) return null;
   if (img.startsWith("http://") || img.startsWith("https://")) return img;
-  if (img.startsWith("/")) return `https://project-backend-fl7h.onrender.com/${img}`;
+  if (img.startsWith("/")) return `https://project-backend-fl7h.onrender.com${img}`;
   return `https://project-backend-fl7h.onrender.com/${img}`;
 };
 
