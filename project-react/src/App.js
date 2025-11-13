@@ -46,7 +46,7 @@ export default function App() {
       : "/";
 
   return (
-    <BrowserRouter basename={basename}>
+    <BrowserRouter basename="https://jackdev934.github.io/project-react">
       <Routes>
         <Route path="/*" element={<Layout />} />
       </Routes>
