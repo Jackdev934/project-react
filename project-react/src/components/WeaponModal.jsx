@@ -1,7 +1,7 @@
-// src/components/WeaponModal.jsx
+
 import React from "react";
 import Modal from "./Modal";
-import "../css/Weapons.css"; // reuse existing styles, plus boss-modal-content if you like
+import "../css/Weapons.css";
 
 const WeaponModal = ({ weapon, isOpen, onClose }) => {
   if (!weapon) return null;
