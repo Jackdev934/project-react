@@ -42,11 +42,11 @@ function Layout() {
 export default function App() {
   const basename =
     process.env.NODE_ENV === "production"
-      ? "/csce242/project-react"
+      ? "/project-react"   
       : "/";
 
   return (
-    <BrowserRouter basename="https://jackdev934.github.io/project-react">
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route path="/*" element={<Layout />} />
       </Routes>
