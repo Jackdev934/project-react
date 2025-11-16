@@ -1,162 +1,205 @@
+/* =========================================================
+   GENERAL COMMUNITY PAGE LAYOUT
+========================================================= */
 
 .community-wrap {
-  width: 95%;
-  max-width: 1400px;
-  margin: 0 auto 60px;
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 36px;
-  align-items: flex-start;
-  box-sizing: border-box;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 1.5rem;
 }
 
-/* Left & Right Panels*/
+/* Left column base layout */
 .community-left,
 .community-right {
-  background: var(--surface, #11161c);
-  border: 1px solid var(--border, #2a2f36);
-  border-radius: var(--radius, 6px);
-  padding: 28px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.community-left {
-  margin-bottom: 32px;
+/* =========================================================
+   FEATURED ART + USER ART GRIDS
+========================================================= */
+
+.community-artwork {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.community-right section {
-  margin-bottom: 36px;
-  padding-right: 12px;
+.community-subheading {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: var(--accent, #c59a38);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* Section Headings*/
-.community-left h3,
-.community-right h3 {
-  text-align: center;
-  font-size: 22px;
-  margin-bottom: 20px;
-  color: var(--text, #edecec);
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid var(--border, #2a2f36);
-  padding-bottom: 8px;
-}
-
-/* Upload Button (Community Artwork) */
-.upload-btn {
-  display: block;
-  margin: 0 auto 24px;
-  background: var(--accent, #73000A);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius, 6px);
-  font-weight: bold;
-  padding: 10px 16px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-.upload-btn:hover {
-  background: #a82323;
-}
-
-/* IMAGE GRIDS */
-.art-grid,
-.comm-grid,
-.thumbs {
+/* Left side artwork grid */
+.art-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  padding: 16px 28px;
-  justify-items: center;
-  box-sizing: border-box;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.8rem;
 }
 
-/* Equal-size image tiles */
-.art-grid img,
-.comm-grid img,
-.thumbs img,
 .art-img {
   width: 100%;
-  max-width: 260px;
-  aspect-ratio: 4 / 3;
+  height: 140px;
   object-fit: cover;
-  border-radius: var(--radius, 6px);
-  border: 1px solid var(--border, #2a2f36);
-  background: #1a1a1a;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, max-width 0.3s ease;
+  border-radius: 8px;
+  border: 1px solid var(--border, #323744);
+  background: #0e1015;
 }
 
-/* Hover animation */
-.art-grid img:hover,
-.comm-grid img:hover,
-.thumbs img:hover {
-  transform: scale(1.04);
-  box-shadow: 0 6px 20px rgba(139, 26, 26, 0.5);
+/* =========================================================
+   USER ART SUBMISSIONS
+========================================================= */
+
+.art-user-card {
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0b0e14;
+  border: 1px solid #2b2f3a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
-.grid.grid-3.comm-grid img {
-  max-width: 360px !important;
+.art-user-card img {
   width: 100%;
+  height: 140px;
+  object-fit: cover;
 }
 
-.grid.grid-3.comm-grid img:hover {
-  transform: scale(1.06);
+.art-user-card figcaption {
+  padding: 0.45rem 0.6rem;
+  font-size: 0.85rem;
+  color: #d8d8d8;
 }
 
+/* =========================================================
+   RIGHT SIDE IMAGE GRIDS (FIXED SIZING)
+========================================================= */
 
+/* Right-side grid layout */
+.comm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+  gap: 0.6rem;
+}
 
-/*RESPONSIVE */
-@media (max-width: 1100px) {
+/* FIX: Images overflowing container */
+.art-img1 {
+  width: 100%;
+  height: 110px;        /* 🔥 smaller fixed height */
+  object-fit: cover;    /* Crop instead of overflow */
+  border-radius: 6px;
+  border: 1px solid #2d313c;
+}
+
+/* =========================================================
+   COMMUNITY SUBMISSION FORM STYLING
+========================================================= */
+
+.community-form-panel {
+  padding: 1.3rem 1rem;
+  background: #10141b;
+  border-radius: 10px;
+  border: 1px solid var(--border, #2a2f36);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
+}
+
+.community-form-panel h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: var(--accent, #c59a38);
+  letter-spacing: 0.05em;
+}
+
+/* Form layout */
+.community-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.community-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: #d2d2d7;
+}
+
+.community-form input {
+  padding: 0.5rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--border, #333843);
+  background: #080b10;
+  color: #f5f5f5;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.community-form input:focus {
+  border-color: var(--accent, #c59a38);
+  background: #0f131a;
+  box-shadow: 0 0 0 1px rgba(197, 154, 56, 0.45);
+}
+
+/* Submit Button */
+.community-form button[type="submit"] {
+  margin-top: 0.3rem;
+  padding: 0.55rem 1.3rem;
+  border-radius: 8px;
+  border: 1px solid var(--accent, #c59a38);
+  background: linear-gradient(135deg, #c59a38, #8f6924);
+  color: #0a0a0a;
+  font-weight: 600;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.community-form button[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(197, 154, 56, 0.5);
+}
+
+/* =========================================================
+   STATUS MESSAGES
+========================================================= */
+
+.status-message {
+  padding: 0.55rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}
+
+.status-message.success {
+  background: rgba(65, 160, 98, 0.16);
+  border: 1px solid rgba(65, 160, 98, 0.6);
+  color: #b5f2c8;
+}
+
+.status-message.error {
+  background: rgba(176, 62, 62, 0.16);
+  border: 1px solid rgba(176, 62, 62, 0.7);
+  color: #f5b5b5;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
   .community-wrap {
     grid-template-columns: 1fr;
   }
-
-  .community-left,
-  .community-right {
-    width: 100%;
-  }
-
-  .art-grid,
-  .comm-grid,
-  .thumbs {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .grid.grid-3.comm-grid img {
-    max-width: 300px !important;
+  .art-img {
+    height: 120px;
   }
 }
 
-/* Mobile */
-@media (max-width: 700px) {
-  .art-grid,
-  .comm-grid,
-  .thumbs {
-    grid-template-columns: 1fr;
+@media (max-width: 600px) {
+  .art-img1 {
+    height: 95px;  /* Mobile: even smaller so they stay inside */
   }
-
-  .grid.grid-3.comm-grid img {
-    max-width: 90% !important;
-  }
-}
-
-@media (min-width: 1400px) {
-  .community-wrap {
-    max-width: 1600px;
-  }
-
-  .grid.grid-3.comm-grid img {
-    max-width: 420px !important;
-  }
-}
-
-@media (min-width: 1800px) {
-  .community-wrap {
-    max-width: 1800px;
-  }
-
-  .grid.grid-3.comm-grid img {
-    max-width: 460px !important;
-  }
-
 }
