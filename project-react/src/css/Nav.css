@@ -40,7 +40,6 @@
   transform: scale(1.05);
 }
 
-/* Reset the older centering tricks – we now use flex for layout */
 .top-nav {
   text-align: unset;
 }
@@ -62,7 +61,7 @@
   text-decoration: none;
   color: #f5f5f5;
   font-size: 0.95rem;
-  white-space: nowrap; /* keep labels on one line */
+  white-space: nowrap; 
 }
 
 #nav-list li > a:hover,
@@ -119,14 +118,14 @@
   #nav-list {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;            /* 💡 allow wrapping to keep tabs inside container */
+    flex-wrap: wrap;           
     justify-content: center;
     gap: 0.25rem;
     max-height: none;
   }
 
   #nav-list.hide-small {
-    max-height: none; /* no collapsing on desktop */
+    max-height: none; 
   }
 
   #nav-list li > a {
