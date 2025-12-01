@@ -6,7 +6,6 @@ const Footer = () => {
       <div className="container">
         <p>&copy; {new Date().getFullYear()} Astora’s Archive • All rights reserved.</p>
 
-        {/* Added backend link for assignment */}
         <p className="backend-link">
           Backend API hosted on Render:{" "}
           <a

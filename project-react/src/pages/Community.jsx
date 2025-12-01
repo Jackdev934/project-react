@@ -23,15 +23,21 @@ import art17 from "../images/artwork/art17.jpg";
 import art18 from "../images/artwork/art18.jpg";
 
 const Community = () => {
-  // NEW: state for user-submitted community art
+  // user-submitted community art from backend
   const [communityArt, setCommunityArt] = useState([]);
+
+  // controlled form fields (still keep title + optional imageUrl)
   const [formData, setFormData] = useState({
     title: "",
     imageUrl: ""
   });
+
   const [formErrors, setFormErrors] = useState([]);
   const [statusMessage, setStatusMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // NEW: image preview state (like AddHousePlan example)
+  const [prevSrc, setPrevSrc] = useState("");
 
   // Fetch existing community art from backend
   const fetchCommunityArt = async () => {
@@ -49,13 +55,14 @@ const Community = () => {
   }, []);
 
   // Simple client-side validation that matches backend
-  const validateForm = () => {
+  const validateForm = (hasFile) => {
     const errors = [];
     if (!formData.title.trim()) {
       errors.push("Title is required.");
     }
-    if (!formData.imageUrl.trim()) {
-      errors.push("Image URL or path is required.");
+    // Instructor specifically wanted file picker, so require a file:
+    if (!hasFile) {
+      errors.push("Please select an image file to upload.");
     }
     return errors;
   };
@@ -68,12 +75,25 @@ const Community = () => {
     }));
   };
 
+  // NEW: handle file input + preview (like uploadImage in template)
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setPrevSrc(URL.createObjectURL(file));
+    } else {
+      setPrevSrc("");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormErrors([]);
     setStatusMessage("");
 
-    const errors = validateForm();
+    const fileInput = e.target.elements.img; // <input id="img" name="img" ... />
+    const hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
+
+    const errors = validateForm(hasFile);
     if (errors.length > 0) {
       setFormErrors(errors);
       return;
@@ -82,10 +102,17 @@ const Community = () => {
     try {
       setIsSubmitting(true);
 
+      // 🔴 IMPORTANT: use FormData like in AddHousePlan
+      const formDataToSend = new FormData(e.target);
+      // This will include:
+      // - title
+      // - imageUrl (optional)
+      // - img (the file input)
+
       const res = await fetch(`${BACKEND_URL}/api/community-art`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        body: formDataToSend
+        // DO NOT set Content-Type, fetch + FormData handle it
       });
 
       const data = await res.json();
@@ -99,6 +126,8 @@ const Community = () => {
       setStatusMessage("Artwork submitted successfully!");
       setFormErrors([]);
       setFormData({ title: "", imageUrl: "" });
+      setPrevSrc(""); // clear preview
+      e.target.reset(); // clear file input
 
       // refresh the list
       await fetchCommunityArt();
@@ -120,7 +149,7 @@ const Community = () => {
           <div className="community-artwork">
             <h3>Community Artwork</h3>
 
-            {/* NEW: submission form */}
+            {/* submission form with file picker + preview */}
             <div className="community-form-panel">
               {statusMessage && (
                 <p className="status-message success">{statusMessage}</p>
@@ -134,7 +163,11 @@ const Community = () => {
                 </ul>
               )}
 
-              <form className="community-form" onSubmit={handleSubmit}>
+              <form
+                className="community-form"
+                onSubmit={handleSubmit}
+                encType="multipart/form-data"
+              >
                 <label>
                   Title
                   <input
@@ -144,15 +177,43 @@ const Community = () => {
                     placeholder="e.g. Abyss Watchers Fanart"
                   />
                 </label>
+
+                {/* Optional: still let them give a URL if they want */}
                 <label>
-                  Image URL or Path
+                  Image URL (optional)
                   <input
                     name="imageUrl"
                     value={formData.imageUrl}
                     onChange={handleInputChange}
-                    placeholder="e.g. https://... or /images/artwork/myart.png"
+                    placeholder="e.g. https://... or leave blank"
                   />
                 </label>
+
+                {/* NEW: image preview + file picker (like AddHousePlan) */}
+                <section className="community-upload-section">
+                  <div className="community-img-preview">
+                    {prevSrc !== "" ? (
+                      <img
+                        src={prevSrc}
+                        alt="Preview"
+                        className="art-img-preview"
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <p className="community-img-upload">
+                    <label htmlFor="img">Select Image:</label>
+                    <input
+                      type="file"
+                      id="img"
+                      name="img"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
+                  </p>
+                </section>
+
                 <button type="submit" disabled={isSubmitting}>
                   {isSubmitting ? "Submitting..." : "Submit Artwork"}
                 </button>
@@ -174,16 +235,16 @@ const Community = () => {
               )}
             </div>
 
-            {/* NEW: user submissions grid */}
+            {/* User submissions grid */}
             {communityArt.length > 0 && (
               <>
                 <h4 className="community-subheading">User Submissions</h4>
                 <div className="art-grid">
                   {communityArt.map((art) => (
-                    <figure key={art.id} className="art-user-card">
+                    <figure key={art.id || art._id} className="art-user-card">
                       <img
                         src={
-                          art.imageUrl.startsWith("http")
+                          art.imageUrl && art.imageUrl.startsWith("http")
                             ? art.imageUrl
                             : `${BACKEND_URL}${art.imageUrl}`
                         }

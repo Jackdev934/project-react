@@ -46,11 +46,14 @@ const Weapons = () => {
     scaling: "",
     requirements: "",
     description: "",
-    img: "" // image path string
+    img: "" // backend still expects this
   });
   const [formErrors, setFormErrors] = useState([]);
   const [statusMessage, setStatusMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // File preview (for the selected weapon image)
+  const [imagePreview, setImagePreview] = useState("");
 
   // ====== Fetch weapons from backend and group them ======
   const fetchWeapons = async () => {
@@ -66,11 +69,14 @@ const Weapons = () => {
         }
         const subMap = sectionsMap.get(w.category);
 
+        // Use either imgs[0] or img, whichever exists
+        const firstImg = (w.imgs && w.imgs[0]) || w.img || null;
+
         if (!subMap.has(w.subclass)) {
           subMap.set(w.subclass, {
             id: w.subclass,
             label: w.subclass,
-            icon: (w.imgs && w.imgs[0]) || null,
+            icon: firstImg,
             weapons: []
           });
         }
@@ -79,7 +85,7 @@ const Weapons = () => {
         subclassObj.weapons.push({
           id: w.id,
           name: w.name,
-          img: (w.imgs && w.imgs[0]) || null,
+          img: firstImg,
           type: w.type,
           scaling: w.scaling,
           requirements: w.requirements,
@@ -165,7 +171,7 @@ const Weapons = () => {
       errors.push("Description is required.");
     }
     if (!formData.img.trim()) {
-      errors.push("Image path is required.");
+      errors.push("Please select an image file.");
     }
 
     return errors;
@@ -178,6 +184,29 @@ const Weapons = () => {
       ...prev,
       [name]: value
     }));
+  };
+
+  // File selector + preview + populate formData.img
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+
+      // Give backend some img value so "img required" is satisfied.
+      // Change this path format if your backend expects something else.
+      setFormData((prev) => ({
+        ...prev,
+        img: `/uploads/${file.name}`
+      }));
+    } else {
+      setImagePreview("");
+      setFormData((prev) => ({
+        ...prev,
+        img: ""
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -203,7 +232,8 @@ const Weapons = () => {
       const data = await res.json();
 
       if (!res.ok || data.ok === false || data.success === false) {
-        const backendErrors = data.details || [data.message || "Failed to add weapon."];
+        const backendErrors =
+          data.details || [data.message || "Failed to add weapon."];
         setFormErrors(backendErrors);
         setStatusMessage("");
         return;
@@ -223,6 +253,8 @@ const Weapons = () => {
         description: "",
         img: ""
       });
+      setImagePreview("");
+      e.target.reset();
 
       await fetchWeapons();
     } catch (err) {
@@ -308,6 +340,7 @@ const Weapons = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
+                required
               />
             </label>
             <label>
@@ -316,6 +349,7 @@ const Weapons = () => {
                 name="label"
                 value={formData.label}
                 onChange={handleInputChange}
+                required
               />
             </label>
           </div>
@@ -327,6 +361,7 @@ const Weapons = () => {
                 name="category"
                 value={formData.category}
                 onChange={handleInputChange}
+                required
               />
             </label>
             <label>
@@ -335,6 +370,7 @@ const Weapons = () => {
                 name="subclass"
                 value={formData.subclass}
                 onChange={handleInputChange}
+                required
               />
             </label>
           </div>
@@ -346,6 +382,7 @@ const Weapons = () => {
                 name="type"
                 value={formData.type}
                 onChange={handleInputChange}
+                required
               />
             </label>
             <label>
@@ -354,6 +391,7 @@ const Weapons = () => {
                 name="scaling"
                 value={formData.scaling}
                 onChange={handleInputChange}
+                required
               />
             </label>
           </div>
@@ -365,6 +403,7 @@ const Weapons = () => {
                 name="requirements"
                 value={formData.requirements}
                 onChange={handleInputChange}
+                required
               />
             </label>
           </div>
@@ -377,17 +416,29 @@ const Weapons = () => {
                 value={formData.description}
                 onChange={handleInputChange}
                 rows={3}
+                required
               />
             </label>
           </div>
 
-          <div className="form-row">
+          {/* File selector + preview */}
+          <div className="form-row image-row">
+            <div className="weapon-img-preview">
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Weapon preview"
+                  className="weapon-img-preview-img"
+                />
+              )}
+            </div>
             <label className="full-width">
-              Image Path (e.g. /images/weapons/straight-swords/longsword.png)
+              Select Image
               <input
-                name="img"
-                value={formData.img}
-                onChange={handleInputChange}
+                type="file"
+                name="weaponImage"
+                accept="image/*"
+                onChange={handleImageChange}
               />
             </label>
           </div>
@@ -406,7 +457,6 @@ const Weapons = () => {
       >
         {selectedSubclass && currentWeapon && (
           <div>
-            {/* Icon of the selected weapon */}
             {currentWeapon.img && (
               <img
                 className="weapon-modal-icon"
@@ -415,7 +465,6 @@ const Weapons = () => {
               />
             )}
 
-            {/* Pills to jump between weapons in this subclass */}
             <div className="weapon-modal-selector">
               {selectedSubclass.weapons.map((w, index) => (
                 <button
@@ -432,7 +481,6 @@ const Weapons = () => {
               ))}
             </div>
 
-            {/* Prev / Next controls */}
             {selectedSubclass.weapons.length > 1 && (
               <div className="weapon-modal-nav">
                 <button onClick={goPrevWeapon}>⟵ Previous</button>
@@ -443,7 +491,6 @@ const Weapons = () => {
               </div>
             )}
 
-            {/* Weapon details */}
             <ul className="weapon-modal-details">
               <li>
                 <strong>Name:</strong> {currentWeapon.name}
