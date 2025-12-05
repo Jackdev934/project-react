@@ -44,10 +44,8 @@ const Community = () => {
   const [editingImageUrl, setEditingImageUrl] = useState("");
   const [editingPreview, setEditingPreview] = useState("");
 
-  // Map of /uploads/... -> blob URL, so user uploads behave like local images
   const [uploadPreviews, setUploadPreviews] = useState({});
 
-  // 🔔 Toast popup state
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
 
@@ -104,7 +102,6 @@ const Community = () => {
         imageUrl: imgPath
       }));
 
-      // Remember this blob URL for this "/uploads/..." path
       setUploadPreviews((prev) => ({
         ...prev,
         [imgPath]: previewUrl
@@ -345,7 +342,7 @@ const Community = () => {
                       <img
                         src={prevSrc}
                         alt="Preview"
-                        className="art-img"
+                        className="art-img art-img-square"
                         onClick={() =>
                           openImageModal(prevSrc, formData.title || "Preview")
                         }
@@ -403,7 +400,6 @@ const Community = () => {
                     ) {
                       imgSrc = art.imageUrl;
                     } else if (art.imageUrl.startsWith("/uploads/")) {
-                      // Use blob URL stored for this upload path
                       imgSrc = uploadPreviews[art.imageUrl] || "";
                     } else {
                       imgSrc = `${BACKEND_URL}${art.imageUrl}`;
@@ -422,7 +418,7 @@ const Community = () => {
                         {displayEditImg && (
                           <img
                             src={displayEditImg}
-                            className="art-img"
+                            className="art-img art-img-square"
                             alt={art.title}
                             onClick={() =>
                               openImageModal(

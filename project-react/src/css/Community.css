@@ -1,24 +1,15 @@
-/* =========================================================
-   GENERAL COMMUNITY PAGE LAYOUT
-========================================================= */
-
 .community-wrap {
   display: grid;
   grid-template-columns: 2fr 1.2fr;
   gap: 1.5rem;
 }
 
-/* Left column base layout */
 .community-left,
 .community-right {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
-
-/* =========================================================
-   FEATURED ART + USER ART GRIDS
-========================================================= */
 
 .community-artwork {
   display: flex;
@@ -34,7 +25,6 @@
   letter-spacing: 0.05em;
 }
 
-/* Left side artwork grid */
 .art-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -50,9 +40,10 @@
   background: #0e1015;
 }
 
-/* =========================================================
-   USER ART SUBMISSIONS
-========================================================= */
+.art-img-square {
+  height: 150px;
+  object-fit: contain;
+}
 
 .art-user-card {
   border-radius: 8px;
@@ -68,35 +59,30 @@
   object-fit: cover;
 }
 
+.art-user-card img.art-img-square {
+  height: 150px;
+  object-fit: contain;
+}
+
 .art-user-card figcaption {
   padding: 0.45rem 0.6rem;
   font-size: 0.85rem;
   color: #d8d8d8;
 }
 
-/* =========================================================
-   RIGHT SIDE IMAGE GRIDS (FIXED SIZING)
-========================================================= */
-
-/* Right-side grid layout */
 .comm-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
   gap: 0.6rem;
 }
 
-/* FIX: Images overflowing container */
 .art-img1 {
   width: 100%;
-  height: 110px;        /* 🔥 smaller fixed height */
-  object-fit: cover;    /* Crop instead of overflow */
+  height: 110px;
+  object-fit: cover;
   border-radius: 6px;
   border: 1px solid #2d313c;
 }
-
-/* =========================================================
-   COMMUNITY SUBMISSION FORM STYLING
-========================================================= */
 
 .community-form-panel {
   padding: 1.3rem 1rem;
@@ -114,7 +100,6 @@
   letter-spacing: 0.05em;
 }
 
-/* Form layout */
 .community-form {
   display: flex;
   flex-direction: column;
@@ -145,7 +130,6 @@
   box-shadow: 0 0 0 1px rgba(197, 154, 56, 0.45);
 }
 
-/* Submit Button */
 .community-form button[type="submit"] {
   margin-top: 0.3rem;
   padding: 0.55rem 1.3rem;
@@ -165,11 +149,6 @@
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
   transform: translateY(-1px);
 }
-
-
-/* =========================================================
-   STATUS MESSAGES
-========================================================= */
 
 .status-message {
   padding: 0.55rem 0.7rem;
@@ -208,6 +187,7 @@
   gap: 0.5rem;
   margin-top: 0.25rem;
 }
+
 .community-edit-button,
 .community-delete-button,
 .community-edit-save,
@@ -256,7 +236,6 @@
   margin-top: 1rem;
 }
 
-
 .toast-notice {
   position: fixed;
   bottom: 1.5rem;
@@ -285,12 +264,6 @@
   }
 }
 
-
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
 @media (max-width: 900px) {
   .community-wrap {
     grid-template-columns: 1fr;
@@ -302,6 +275,6 @@
 
 @media (max-width: 600px) {
   .art-img1 {
-    height: 95px;  /* Mobile: even smaller so they stay inside */
+    height: 95px;
   }
 }
