@@ -1,311 +1,159 @@
-/* === Layout: row per weapon class, horizontal scroll === */
-.weapon-section {
-  margin-bottom: 2rem;
+.community-wrap {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  gap: 1.5rem;
 }
 
-.weapon-section-title {
-  margin-bottom: 0.75rem;
-}
-
-/* This is the horizontal row */
-.weapon-scroll-row {
-  display: flex;           /* row, not column */
-  align-items: flex-start;
-  gap: 1rem;
-  overflow-x: auto;
-  padding-bottom: 0.5rem;
-}
-
-.weapon-scroll-row::-webkit-scrollbar {
-  height: 6px;
-}
-
-.weapon-scroll-row::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 3px;
-}
-
-/* === Cards in each row === */
-.subclass-card {
-  flex: 0 0 auto;          /* don’t shrink, stay side by side */
-  width: 180px;            /* fixed box width */
-  min-height: 220px;       /* room for image + button */
-  padding: 0.5rem 0.5rem 0.75rem;
-  border-radius: 8px;
-  background: #121212;
-  border: 1px solid #333;
-  text-align: center;
-  cursor: pointer;
-  box-sizing: border-box;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.subclass-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
-  border-color: #c59a38;
-}
-
-.subclass-card img {
-  width: 100%;
-  height: 120px;           
-  object-fit: contain;    
-  display: block;
-  margin: 0 auto 0.4rem;
-}
-
-
-.subclass-card .pill {
-  padding: 0.25rem 0.75rem;
-  font-size: 0.8rem;
-  border-radius: 999px;
-  border: 1px solid #666;
-  background: #1d1d1d;
-  color: #eee;
-}
-
-
-.weapon-modal-main {
-  max-width: 720px;
-  margin: 0 auto;
-}
-
-.weapon-modal-layout {
+.community-left,
+.community-right {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  align-items: center;
+  gap: 1.5rem;
 }
 
-@media (min-width: 768px) {
-  .weapon-modal-layout {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-}
-
-/* ===== ICON / IMAGE ===== */
-
-.weapon-modal-icon {
-  width: 140px;       
-  height: 140px;
-  object-fit: contain;  
-  display: block;
-  margin: 0 auto;
-  padding: 0.5rem;
-
-  background: #101010;
-  border-radius: 10px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
-}
-
-.weapon-modal-icon-wrap {
-  flex: 0 0 auto;
-}
-
-
-.weapon-modal-right {
-  flex: 1 1 auto;
-}
-
-.weapon-modal-nav {
+.community-artwork {
   display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.weapon-modal-nav button {
-  padding: 0.3rem 0.8rem;
-  border-radius: 999px;
-  border: 1px solid #999;
-  background: #111;
-  color: #eee;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+.community-subheading {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: var(--accent, #c59a38);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.weapon-modal-nav button:hover {
-  background: #c59a38;
-  color: #000;
-  border-color: #c59a38;
+.art-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.8rem;
 }
 
-
-.weapon-modal-selector {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 0.75rem;
-  justify-content: center;
-}
-
-.weapon-pill {
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid #777;
-  background: #222;
-  color: #eee;
-  font-size: 0.78rem;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-}
-
-.weapon-pill:hover {
-  border-color: #c59a38;
-}
-
-.weapon-pill-active {
-  background: #c59a38;
-  border-color: #c59a38;
-  color: #000;
-}
-
-
-.weapon-modal-details {
-  list-style: none;
-  padding-left: 0;
-  margin: 0 0 0.6rem;
-  font-size: 0.88rem;
-}
-
-.weapon-modal-details li {
-  margin-bottom: 0.15rem;
-}
-
-
-.weapon-modal-notes {
-  font-size: 0.9rem;
-  line-height: 1.4;
-  color: #ddd;
-}
-
-
-.weapon-modal-notes::before {
-  content: "";
-  display: block;
-  height: 1px;
+.art-img {
   width: 100%;
-  margin: 0.35rem 0 0.5rem;
-  background: linear-gradient(to right, transparent, #555, transparent);
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border, #323744);
+  background: #0e1015;
 }
 
+.art-img-square {
+  height: 150px;
+  object-fit: contain;
+}
 
-/* ===== Add Weapon Panel ===== */
+.art-user-card {
+  border-radius: 8px;
+  overflow: hidden;
+  background: #0b0e14;
+  border: 1px solid #2b2f3a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
 
-.add-weapon-panel {
-  margin-top: 2.5rem;
-  padding: 1.75rem 1.5rem;
-  background: var(--surface, #10141b);
-  border: 1px solid var(--border, #2a2f36);
+.art-user-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.art-user-card img.art-img-square {
+  height: 150px;
+  object-fit: contain;
+}
+
+.art-user-card figcaption {
+  padding: 0.45rem 0.6rem;
+  font-size: 0.85rem;
+  color: #d8d8d8;
+}
+
+.comm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+  gap: 0.6rem;
+}
+
+.art-img1 {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #2d313c;
+}
+
+.community-form-panel {
+  padding: 1.3rem 1rem;
+  background: #10141b;
   border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--border, #2a2f36);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.6);
 }
 
-.add-weapon-panel h3 {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-size: 1.3rem;
-  letter-spacing: 0.03em;
+.community-form-panel h4 {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
   text-transform: uppercase;
   color: var(--accent, #c59a38);
+  letter-spacing: 0.05em;
 }
 
-/* ===== Form Layout ===== */
-
-.weapon-form {
+.community-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
 }
 
-.form-row .full-width {
-  grid-column: 1 / -1;
-}
-
-.weapon-form label {
+.community-form label {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
   font-size: 0.9rem;
-  color: var(--muted, #d0ced2);
+  color: #d2d2d7;
 }
 
-/* Inputs / Textarea */
-
-.weapon-form input,
-.weapon-form textarea {
-  padding: 0.55rem 0.7rem;
+.community-form input {
+  padding: 0.5rem 0.7rem;
   border-radius: 6px;
   border: 1px solid var(--border, #333843);
   background: #080b10;
   color: #f5f5f5;
   font-size: 0.9rem;
   outline: none;
-  transition: border-color 0.15s ease, background 0.15s ease,
-    box-shadow 0.15s ease;
 }
 
-.weapon-form input::placeholder,
-.weapon-form textarea::placeholder {
-  color: #767b86;
-}
-
-.weapon-form input:focus,
-.weapon-form textarea:focus {
+.community-form input:focus {
   border-color: var(--accent, #c59a38);
   background: #0f131a;
   box-shadow: 0 0 0 1px rgba(197, 154, 56, 0.45);
 }
 
-/* Submit button */
-
-.weapon-form button[type="submit"] {
-  align-self: flex-end;
-  margin-top: 0.5rem;
-  padding: 0.6rem 1.4rem;
+.community-form button[type="submit"] {
+  margin-top: 0.3rem;
+  padding: 0.55rem 1.3rem;
   border-radius: 8px;
-  border: 1px solid var(--accent, #c59a38);
-  background: rgba(255, 255, 255, 0.06);
-  color: #0a0a0a;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  letter-spacing: 0.03em;
+  border: 1px solid #b84444;
+  background: #801c1c;
+  color: #f5f5f5;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  transition: transform 0.1s ease, box-shadow 0.15s ease,
-    filter 0.15s ease;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
 }
 
-.weapon-form button[type="submit"]:hover:not(:disabled) {
+.community-form button[type="submit"]:hover {
+  background: #a92626;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(197, 154, 56, 0.5);
-  filter: brightness(1.05);
 }
-
-.weapon-form button[type="submit"]:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-/* ===== Status Messages ===== */
 
 .status-message {
-  margin: 0 0 0.75rem 0;
-  padding: 0.6rem 0.8rem;
+  padding: 0.55rem 0.7rem;
   border-radius: 6px;
   font-size: 0.85rem;
-  line-height: 1.4;
 }
 
 .status-message.success {
@@ -318,39 +166,75 @@
   background: rgba(176, 62, 62, 0.16);
   border: 1px solid rgba(176, 62, 62, 0.7);
   color: #f5b5b5;
-  list-style: disc inside;
 }
 
-/* ===== Delete Weapon Button in Modal ===== */
-.weapon-modal-actions {
-  margin-top: 1.5rem;
-  text-align: right;
+.community-modal-body {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
 }
 
-.danger-button,
-.weapon-edit-button,
-.weapon-edit-cancel {
-  padding: 0.5rem 1.1rem;
+.community-modal-img {
+  width: auto;
+  max-width: 220px;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.community-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.community-edit-button,
+.community-delete-button,
+.community-edit-save,
+.community-edit-cancel {
+  font-size: 0.75rem;
+  padding: 0.4rem 1rem;
   border-radius: 6px;
   border: 1px solid #b84444;
   background: #801c1c;
   color: #f5f5f5;
   cursor: pointer;
-  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   transition: background 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
 }
 
-.danger-button:hover,
-.weapon-edit-button:hover,
-.weapon-edit-cancel:hover {
-  background: #a92626;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6);
+.community-edit-button:hover,
+.community-edit-save:hover {
+  background: #222832;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
   transform: translateY(-1px);
 }
 
+.community-delete-button:hover,
+.community-edit-cancel:hover {
+  background: #801c1c;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.7);
+  transform: translateY(-1px);
+}
 
+.community-edit-input {
+  width: 100%;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #323744;
+  background: #0b0f14;
+  color: #f5f5f5;
+}
+
+.community-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
 
 .toast-notice {
   position: fixed;
@@ -380,18 +264,17 @@
   }
 }
 
-
-
-/* ===== Responsive tweaks ===== */
-
-@media (max-width: 768px) {
-  .form-row {
+@media (max-width: 900px) {
+  .community-wrap {
     grid-template-columns: 1fr;
   }
-
-  .weapon-form button[type="submit"] {
-    align-self: stretch;
-    text-align: center;
+  .art-img {
+    height: 120px;
   }
 }
 
+@media (max-width: 600px) {
+  .art-img1 {
+    height: 95px;
+  }
+}

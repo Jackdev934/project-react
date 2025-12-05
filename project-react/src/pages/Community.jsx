@@ -41,6 +41,11 @@ const Community = () => {
 
   const [editingId, setEditingId] = useState(null);
   const [editingTitle, setEditingTitle] = useState("");
+  const [editingImageUrl, setEditingImageUrl] = useState("");
+  const [editingPreview, setEditingPreview] = useState("");
+
+  // Map of /uploads/... -> blob URL, so user uploads behave like local images
+  const [uploadPreviews, setUploadPreviews] = useState({});
 
   // 🔔 Toast popup state
   const [toastMessage, setToastMessage] = useState("");
@@ -91,10 +96,18 @@ const Community = () => {
     const file = event.target.files[0];
     if (file) {
       const previewUrl = URL.createObjectURL(file);
+      const imgPath = `/uploads/${file.name}`;
+
       setPrevSrc(previewUrl);
       setFormData((prev) => ({
         ...prev,
-        imageUrl: previewUrl
+        imageUrl: imgPath
+      }));
+
+      // Remember this blob URL for this "/uploads/..." path
+      setUploadPreviews((prev) => ({
+        ...prev,
+        [imgPath]: previewUrl
       }));
     } else {
       setPrevSrc("");
@@ -162,13 +175,50 @@ const Community = () => {
 
   const startEdit = (art) => {
     const id = art.id || art._id;
+    const rawUrl = art.imageUrl || "";
+
+    let preview = "";
+    if (!rawUrl) {
+      preview = "";
+    } else if (
+      rawUrl.startsWith("http://") ||
+      rawUrl.startsWith("https://") ||
+      rawUrl.startsWith("blob:")
+    ) {
+      preview = rawUrl;
+    } else if (rawUrl.startsWith("/uploads/")) {
+      preview = uploadPreviews[rawUrl] || "";
+    } else {
+      preview = `${BACKEND_URL}${rawUrl}`;
+    }
+
     setEditingId(id);
     setEditingTitle(art.title || "");
+    setEditingImageUrl(rawUrl);
+    setEditingPreview(preview);
   };
 
   const cancelEdit = () => {
     setEditingId(null);
     setEditingTitle("");
+    setEditingImageUrl("");
+    setEditingPreview("");
+  };
+
+  const handleEditImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      const imgPath = `/uploads/${file.name}`;
+
+      setEditingPreview(previewUrl);
+      setEditingImageUrl(imgPath);
+
+      setUploadPreviews((prev) => ({
+        ...prev,
+        [imgPath]: previewUrl
+      }));
+    }
   };
 
   const saveEdit = async (id) => {
@@ -181,7 +231,10 @@ const Community = () => {
       const res = await fetch(`${BACKEND_URL}/api/community-art/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: editingTitle })
+        body: JSON.stringify({
+          title: editingTitle,
+          imageUrl: editingImageUrl
+        })
       });
 
       const data = await res.json();
@@ -196,7 +249,11 @@ const Community = () => {
         prev.map((art) => {
           const artId = art.id || art._id;
           if (artId === id) {
-            return { ...art, title: editingTitle };
+            return {
+              ...art,
+              title: editingTitle,
+              imageUrl: editingImageUrl || art.imageUrl
+            };
           }
           return art;
         })
@@ -204,7 +261,9 @@ const Community = () => {
 
       setEditingId(null);
       setEditingTitle("");
-      triggerToast("Artwork title updated.");
+      setEditingImageUrl("");
+      setEditingPreview("");
+      triggerToast("Artwork updated.");
     } catch (err) {
       console.error("Error updating artwork:", err);
       alert("Network error while updating artwork.");
@@ -240,6 +299,8 @@ const Community = () => {
       if (editingId === id) {
         setEditingId(null);
         setEditingTitle("");
+        setEditingImageUrl("");
+        setEditingPreview("");
       }
 
       triggerToast("Artwork deleted.");
@@ -341,47 +402,79 @@ const Community = () => {
                       art.imageUrl.startsWith("blob:")
                     ) {
                       imgSrc = art.imageUrl;
+                    } else if (art.imageUrl.startsWith("/uploads/")) {
+                      // Use blob URL stored for this upload path
+                      imgSrc = uploadPreviews[art.imageUrl] || "";
                     } else {
                       imgSrc = `${BACKEND_URL}${art.imageUrl}`;
                     }
 
                     const id = art.id || art._id;
 
+                    const isEditingThis = editingId === id;
+                    const displayEditImg =
+                      isEditingThis && editingPreview
+                        ? editingPreview
+                        : imgSrc;
+
                     return (
                       <figure key={id} className="art-user-card">
-                        {imgSrc && (
+                        {displayEditImg && (
                           <img
-                            src={imgSrc}
+                            src={displayEditImg}
                             className="art-img"
                             alt={art.title}
                             onClick={() =>
-                              openImageModal(imgSrc, art.title || "User Artwork")
+                              openImageModal(
+                                displayEditImg,
+                                art.title || "User Artwork"
+                              )
                             }
                           />
                         )}
-                        {editingId === id ? (
-                          <div className="community-edit-row">
-                            <input
-                              className="community-edit-input"
-                              value={editingTitle}
-                              onChange={(e) =>
-                                setEditingTitle(e.target.value)
-                              }
-                            />
-                            <button
-                              type="button"
-                              className="community-edit-save"
-                              onClick={() => saveEdit(id)}
-                            >
-                              Save
-                            </button>
-                            <button
-                              type="button"
-                              className="community-edit-cancel"
-                              onClick={cancelEdit}
-                            >
-                              Cancel
-                            </button>
+
+                        {isEditingThis ? (
+                          <div className="community-edit-block">
+                            <div className="community-edit-row">
+                              <label className="community-edit-label">
+                                Title
+                                <input
+                                  className="community-edit-input"
+                                  value={editingTitle}
+                                  onChange={(e) =>
+                                    setEditingTitle(e.target.value)
+                                  }
+                                />
+                              </label>
+                            </div>
+
+                            <div className="community-edit-row">
+                              <label className="community-edit-label">
+                                Change Image
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleEditImageUpload}
+                                />
+                              </label>
+                            </div>
+
+                            <div className="community-edit-actions">
+                              <button
+                                type="button"
+                                className="community-edit-save"
+                                onClick={() => saveEdit(id)}
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                className="community-edit-cancel"
+                                onClick={cancelEdit}
+                              >
+                                Cancel
+                              </button>
+                            </div>
                           </div>
                         ) : (
                           <>

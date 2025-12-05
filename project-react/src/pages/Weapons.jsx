@@ -1,83 +1,51 @@
 import { useEffect, useState } from "react";
-import "../css/Weapons.css";
-import Modal from "../components/Modal";
+import "../css/Community.css";
 import BACKEND_URL from "../config";
+import Modal from "../components/Modal";
 
-/* ========= Small presentational components ========= */
+import art1 from "../images/artwork/art1.jpeg";
+import art2 from "../images/artwork/art2.jpeg";
+import art3 from "../images/artwork/art3.jpeg";
+import art4 from "../images/artwork/art4.jpeg";
+import art5 from "../images/artwork/art5.jpeg";
+import art6 from "../images/artwork/art6.jpeg";
+import art7 from "../images/artwork/art7.jpeg";
+import art8 from "../images/artwork/art8.jpeg";
+import art9 from "../images/artwork/art9.jpeg";
+import art10 from "../images/artwork/art10.jpeg";
+import art11 from "../images/artwork/art11.jpeg";
+import art12 from "../images/artwork/art12.jpeg";
+import art13 from "../images/artwork/art13.jpg";
+import art14 from "../images/artwork/art14.jpeg";
+import art15 from "../images/artwork/art15.jpeg";
+import art16 from "../images/artwork/art16.jpg";
+import art17 from "../images/artwork/art17.jpg";
+import art18 from "../images/artwork/art18.jpg";
 
-const SubclassCard = ({ subclass, onClick, imagePreview }) => {
-  let iconSrc = null;
-
-  if (subclass.icon) {
-    if (
-      subclass.icon.startsWith("http://") ||
-      subclass.icon.startsWith("https://")
-    ) {
-      iconSrc = subclass.icon;
-    } else if (subclass.icon.startsWith("/uploads/")) {
-      iconSrc = imagePreview || null;
-    } else {
-      iconSrc = `${BACKEND_URL}${subclass.icon}`;
-    }
-  }
-
-  return (
-    <article className="subclass-card" onClick={onClick}>
-      {iconSrc && <img src={iconSrc} alt={subclass.label} />}
-      <button className="pill">{subclass.label}</button>
-    </article>
-  );
-};
-
-const WeaponSection = ({ title, subclasses, onSubclassClick, imagePreview }) => (
-  <div className="weapon-section">
-    <h2 className="weapon-section-title">{title}</h2>
-    <div className="weapon-scroll-row">
-      {subclasses.map((sub) => (
-        <SubclassCard
-          key={sub.id}
-          subclass={sub}
-          onClick={() => onSubclassClick(sub)}
-          imagePreview={imagePreview}
-        />
-      ))}
-    </div>
-  </div>
-);
-
-/* ========= Main Component ========= */
-
-const Weapons = () => {
-  const [weaponSections, setWeaponSections] = useState([]);
-  const [selectedSubclass, setSelectedSubclass] = useState(null);
-  const [selectedWeaponIndex, setSelectedWeaponIndex] = useState(0);
+const Community = () => {
+  const [communityArt, setCommunityArt] = useState([]);
 
   const [formData, setFormData] = useState({
-    name: "",
-    label: "",
-    category: "",
-    subclass: "",
-    type: "",
-    scaling: "",
-    requirements: "",
-    description: "",
-    img: ""
+    title: "",
+    imageUrl: ""
   });
+
   const [formErrors, setFormErrors] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [imagePreview, setImagePreview] = useState("");
+  const [prevSrc, setPrevSrc] = useState("");
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [editFields, setEditFields] = useState({
-    name: "",
-    type: "",
-    scaling: "",
-    requirements: "",
-    description: ""
-  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImageSrc, setModalImageSrc] = useState("");
+  const [modalImageTitle, setModalImageTitle] = useState("");
 
-  // 🔔 Toast popup state
+  const [editingId, setEditingId] = useState(null);
+  const [editingTitle, setEditingTitle] = useState("");
+  const [editingImageUrl, setEditingImageUrl] = useState("");
+  const [editingPreview, setEditingPreview] = useState("");
+
+  const [uploadPreviews, setUploadPreviews] = useState({});
+
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
 
@@ -89,153 +57,60 @@ const Weapons = () => {
     }, 2500);
   };
 
-  const fetchWeapons = async () => {
+  const fetchCommunityArt = async () => {
     try {
-      const res = await fetch(`${BACKEND_URL}/api/weapons`);
+      const res = await fetch(`${BACKEND_URL}/api/community-art`);
       const data = await res.json();
-
-      const sectionsMap = new Map();
-
-      data.forEach((w) => {
-        if (!sectionsMap.has(w.category)) {
-          sectionsMap.set(w.category, new Map());
-        }
-        const subMap = sectionsMap.get(w.category);
-
-        const firstImg = (w.imgs && w.imgs[0]) || w.img || null;
-
-        if (!subMap.has(w.subclass)) {
-          subMap.set(w.subclass, {
-            id: w.subclass,
-            label: w.subclass,
-            icon: firstImg,
-            weapons: []
-          });
-        }
-
-        const subclassObj = subMap.get(w.subclass);
-        subclassObj.weapons.push({
-          id: w.id,
-          name: w.name,
-          img: firstImg,
-          type: w.type,
-          scaling: w.scaling,
-          requirements: w.requirements,
-          description: w.description
-        });
-      });
-
-      const finalSections = Array.from(sectionsMap.entries()).map(
-        ([categoryName, subMap]) => ({
-          title: categoryName,
-          subclasses: Array.from(subMap.values())
-        })
-      );
-
-      setWeaponSections(finalSections);
+      setCommunityArt(data);
     } catch (err) {
-      console.error("Failed to fetch weapons:", err);
+      console.error("Failed to fetch community art:", err);
     }
   };
 
   useEffect(() => {
-    fetchWeapons();
+    fetchCommunityArt();
   }, []);
-
-  const openSubclassModal = (subclass) => {
-    setSelectedSubclass(subclass);
-    setSelectedWeaponIndex(0);
-    setIsEditing(false);
-    setEditFields({
-      name: "",
-      type: "",
-      scaling: "",
-      requirements: "",
-      description: ""
-    });
-  };
-
-  const closeModal = () => {
-    setSelectedSubclass(null);
-    setSelectedWeaponIndex(0);
-    setIsEditing(false);
-    setEditFields({
-      name: "",
-      type: "",
-      scaling: "",
-      requirements: "",
-      description: ""
-    });
-  };
-
-  const currentWeapon =
-    selectedSubclass?.weapons?.[selectedWeaponIndex] || null;
-
-  const goPrevWeapon = () => {
-    if (!selectedSubclass) return;
-    const len = selectedSubclass.weapons.length;
-    setSelectedWeaponIndex((prev) => (prev - 1 + len) % len);
-    setIsEditing(false);
-  };
-
-  const goNextWeapon = () => {
-    if (!selectedSubclass) return;
-    const len = selectedSubclass.weapons.length;
-    setSelectedWeaponIndex((prev) => (prev + 1) % len);
-    setIsEditing(false);
-  };
-
-  const selectWeaponByIndex = (index) => {
-    setSelectedWeaponIndex(index);
-    setIsEditing(false);
-  };
 
   const validateForm = () => {
     const errors = [];
-
-    if (!formData.name.trim()) errors.push("Name is required.");
-    if (!formData.label.trim()) {
-      errors.push("Label is required.");
-    } else if (!/^[a-zA-Z0-9_-]+$/.test(formData.label.trim())) {
-      errors.push("Label must be alphanumeric (you can use - or _).");
+    if (!formData.title.trim()) {
+      errors.push("Title is required.");
     }
-    if (!formData.category.trim()) errors.push("Category is required.");
-    if (!formData.subclass.trim()) errors.push("Subclass is required.");
-    if (!formData.type.trim()) errors.push("Type is required.");
-    if (!formData.scaling.trim()) errors.push("Scaling is required.");
-    if (!formData.requirements.trim())
-      errors.push("Requirements are required.");
-    if (!formData.description.trim())
-      errors.push("Description is required.");
-    if (!formData.img.trim()) errors.push("Please select an image file.");
-
+    if (!formData.imageUrl.trim()) {
+      errors.push("Please select an image file.");
+    }
     return errors;
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleTitleChange = (e) => {
+    const { value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value
+      title: value
     }));
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
     if (file) {
       const previewUrl = URL.createObjectURL(file);
-      setImagePreview(previewUrl);
+      const imgPath = `/uploads/${file.name}`;
 
+      setPrevSrc(previewUrl);
       setFormData((prev) => ({
         ...prev,
-        img: `/uploads/${file.name}`
+        imageUrl: imgPath
+      }));
+
+      setUploadPreviews((prev) => ({
+        ...prev,
+        [imgPath]: previewUrl
       }));
     } else {
-      setImagePreview("");
+      setPrevSrc("");
       setFormData((prev) => ({
         ...prev,
-        img: ""
+        imageUrl: ""
       }));
     }
   };
@@ -253,7 +128,7 @@ const Weapons = () => {
     try {
       setIsSubmitting(true);
 
-      const res = await fetch(`${BACKEND_URL}/api/weapons`, {
+      const res = await fetch(`${BACKEND_URL}/api/community-art`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
@@ -261,500 +136,438 @@ const Weapons = () => {
 
       const data = await res.json();
 
-      if (!res.ok || data.ok === false || data.success === false) {
+      if (!res.ok || data.ok === false) {
         const backendErrors =
-          data.details || [data.message || "Failed to add weapon."];
+          data.details || [data.message || "Failed to add artwork."];
         setFormErrors(backendErrors);
         return;
       }
 
-      triggerToast("Weapon added successfully!");
+      triggerToast("Artwork submitted successfully!");
       setFormErrors([]);
-
-      setFormData({
-        name: "",
-        label: "",
-        category: "",
-        subclass: "",
-        type: "",
-        scaling: "",
-        requirements: "",
-        description: "",
-        img: ""
-      });
-      setImagePreview("");
+      setFormData({ title: "", imageUrl: "" });
+      setPrevSrc("");
       e.target.reset();
 
-      await fetchWeapons();
+      await fetchCommunityArt();
     } catch (err) {
-      console.error("Error submitting weapon:", err);
-      setFormErrors(["Network or server error while adding weapon."]);
+      console.error("Error submitting artwork:", err);
+      setFormErrors(["Network or server error while adding artwork."]);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleDeleteCurrentWeapon = async () => {
-    if (!currentWeapon || currentWeapon.id == null) return;
+  const openImageModal = (src, title) => {
+    setModalImageSrc(src);
+    setModalImageTitle(title || "Artwork");
+    setIsModalOpen(true);
+  };
 
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete "${currentWeapon.name}"?`
-    );
-    if (!confirmDelete) return;
+  const closeImageModal = () => {
+    setIsModalOpen(false);
+    setModalImageSrc("");
+    setModalImageTitle("");
+  };
 
-    try {
-      const res = await fetch(
-        `${BACKEND_URL}/api/weapons/${currentWeapon.id}`,
-        {
-          method: "DELETE"
-        }
-      );
+  const startEdit = (art) => {
+    const id = art.id || art._id;
+    const rawUrl = art.imageUrl || "";
 
-      const data = await res.json();
+    let preview = "";
+    if (!rawUrl) {
+      preview = "";
+    } else if (
+      rawUrl.startsWith("http://") ||
+      rawUrl.startsWith("https://") ||
+      rawUrl.startsWith("blob:")
+    ) {
+      preview = rawUrl;
+    } else if (rawUrl.startsWith("/uploads/")) {
+      preview = uploadPreviews[rawUrl] || "";
+    } else {
+      preview = `${BACKEND_URL}${rawUrl}`;
+    }
 
-      if (!res.ok || data.ok === false) {
-        console.error("Failed to delete weapon:", data);
-        alert(data.message || "Failed to delete weapon.");
-        return;
-      }
+    setEditingId(id);
+    setEditingTitle(art.title || "");
+    setEditingImageUrl(rawUrl);
+    setEditingPreview(preview);
+  };
 
-      triggerToast("Weapon deleted.");
-      await fetchWeapons();
-      closeModal();
-    } catch (err) {
-      console.error("Error deleting weapon:", err);
-      alert("Network error while deleting weapon.");
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditingTitle("");
+    setEditingImageUrl("");
+    setEditingPreview("");
+  };
+
+  const handleEditImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      const imgPath = `/uploads/${file.name}`;
+
+      setEditingPreview(previewUrl);
+      setEditingImageUrl(imgPath);
+
+      setUploadPreviews((prev) => ({
+        ...prev,
+        [imgPath]: previewUrl
+      }));
     }
   };
 
-  const startEditCurrentWeapon = () => {
-    if (!currentWeapon) return;
-    setIsEditing(true);
-    setEditFields({
-      name: currentWeapon.name || "",
-      type: currentWeapon.type || "",
-      scaling: currentWeapon.scaling || "",
-      requirements: currentWeapon.requirements || "",
-      description: currentWeapon.description || ""
-    });
-  };
-
-  const cancelEditCurrentWeapon = () => {
-    setIsEditing(false);
-  };
-
-  const handleEditFieldChange = (field, value) => {
-    setEditFields((prev) => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const saveEditCurrentWeapon = async () => {
-    if (!currentWeapon || currentWeapon.id == null) return;
-
-    if (
-      !editFields.name.trim() ||
-      !editFields.type.trim() ||
-      !editFields.scaling.trim() ||
-      !editFields.requirements.trim() ||
-      !editFields.description.trim()
-    ) {
-      alert("All fields must be filled out.");
+  const saveEdit = async (id) => {
+    if (!editingTitle.trim()) {
+      alert("Title cannot be empty.");
       return;
     }
 
     try {
-      const res = await fetch(
-        `${BACKEND_URL}/api/weapons/${currentWeapon.id}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: editFields.name,
-            type: editFields.type,
-            scaling: editFields.scaling,
-            requirements: editFields.requirements,
-            description: editFields.description
-          })
-        }
-      );
+      const res = await fetch(`${BACKEND_URL}/api/community-art/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: editingTitle,
+          imageUrl: editingImageUrl
+        })
+      });
 
       const data = await res.json();
 
       if (!res.ok || data.ok === false) {
-        console.error("Failed to update weapon:", data);
-        alert(data.message || "Failed to update weapon.");
+        console.error("Failed to update artwork:", data);
+        alert(data.message || "Failed to update artwork.");
         return;
       }
 
-      setWeaponSections((prev) =>
-        prev.map((section) => ({
-          ...section,
-          subclasses: section.subclasses.map((sub) => ({
-            ...sub,
-            weapons: sub.weapons.map((w) =>
-              w.id === currentWeapon.id
-                ? {
-                    ...w,
-                    name: editFields.name,
-                    type: editFields.type,
-                    scaling: editFields.scaling,
-                    requirements: editFields.requirements,
-                    description: editFields.description
-                  }
-                : w
-            )
-          }))
-        }))
+      setCommunityArt((prev) =>
+        prev.map((art) => {
+          const artId = art.id || art._id;
+          if (artId === id) {
+            return {
+              ...art,
+              title: editingTitle,
+              imageUrl: editingImageUrl || art.imageUrl
+            };
+          }
+          return art;
+        })
       );
 
-      setSelectedSubclass((prev) =>
-        prev
-          ? {
-              ...prev,
-              weapons: prev.weapons.map((w) =>
-                w.id === currentWeapon.id
-                  ? {
-                      ...w,
-                      name: editFields.name,
-                      type: editFields.type,
-                      scaling: editFields.scaling,
-                      requirements: editFields.requirements,
-                      description: editFields.description
-                    }
-                  : w
-              )
-            }
-          : prev
-      );
-
-      setIsEditing(false);
-      triggerToast("Weapon updated successfully!");
+      setEditingId(null);
+      setEditingTitle("");
+      setEditingImageUrl("");
+      setEditingPreview("");
+      triggerToast("Artwork updated.");
     } catch (err) {
-      console.error("Error updating weapon:", err);
-      alert("Network error while updating weapon.");
+      console.error("Error updating artwork:", err);
+      alert("Network error while updating artwork.");
     }
   };
 
-  let modalImageSrc = null;
+  const handleDeleteArt = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this artwork?"
+    );
+    if (!confirmDelete) return;
 
-  if (currentWeapon && currentWeapon.img && currentWeapon.img.trim() !== "") {
-    if (
-      currentWeapon.img.startsWith("http://") ||
-      currentWeapon.img.startsWith("https://")
-    ) {
-      modalImageSrc = currentWeapon.img;
-    } else if (currentWeapon.img.startsWith("/uploads/")) {
-      modalImageSrc = imagePreview || null;
-    } else {
-      modalImageSrc = `${BACKEND_URL}${currentWeapon.img}`;
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/community-art/${id}`, {
+        method: "DELETE"
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.ok === false) {
+        console.error("Failed to delete artwork:", data);
+        alert(data.message || "Failed to delete artwork.");
+        return;
+      }
+
+      setCommunityArt((prev) =>
+        prev.filter((art) => {
+          const artId = art.id || art._id;
+          return artId !== id;
+        })
+      );
+
+      if (editingId === id) {
+        setEditingId(null);
+        setEditingTitle("");
+        setEditingImageUrl("");
+        setEditingPreview("");
+      }
+
+      triggerToast("Artwork deleted.");
+    } catch (err) {
+      console.error("Error deleting artwork:", err);
+      alert("Network error while deleting artwork.");
     }
-  } else if (imagePreview) {
-    modalImageSrc = imagePreview;
-  }
+  };
 
   return (
     <section className="page">
-      <h2>Weapons &amp; Tools</h2>
-      <h2 className="weapon-head-title">Dark Souls III Weapon Classes</h2>
+      <h2>Community</h2>
 
-      <div className="weapon-container">
-        <div className="weapon-sections">
-          {weaponSections.map((section) => (
-            <WeaponSection
-              key={section.title}
-              title={section.title}
-              subclasses={section.subclasses}
-              onSubclassClick={openSubclassModal}
-              imagePreview={imagePreview}
-            />
-          ))}
-        </div>
-      </div>
+      <main className="container grid grid-2 community-wrap">
+        <section className="band-dark community-left">
+          <div className="community-artwork">
+            <h3>Community Artwork</h3>
 
-      <div className="add-weapon-panel">
-        <h3>Add a New Weapon</h3>
+            <div className="community-form-panel">
+              {formErrors.length > 0 && (
+                <ul className="status-message error">
+                  {formErrors.map((err, idx) => (
+                    <li key={idx}>{err}</li>
+                  ))}
+                </ul>
+              )}
 
-        {formErrors.length > 0 && (
-          <ul className="status-message error">
-            {formErrors.map((err, idx) => (
-              <li key={idx}>{err}</li>
-            ))}
-          </ul>
-        )}
+              <form className="community-form" onSubmit={handleSubmit}>
+                <label>
+                  Title
+                  <input
+                    name="title"
+                    value={formData.title}
+                    onChange={handleTitleChange}
+                    placeholder="e.g. Abyss Watchers Fanart"
+                  />
+                </label>
 
-        <form className="weapon-form" onSubmit={handleSubmit}>
-          <div className="form-row">
-            <label>
-              Name
-              <input
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-            <label>
-              Label (no spaces)
-              <input
-                name="label"
-                value={formData.label}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-          </div>
+                <section className="community-upload-section">
+                  <div className="community-img-preview">
+                    {prevSrc !== "" && (
+                      <img
+                        src={prevSrc}
+                        alt="Preview"
+                        className="art-img art-img-square"
+                        onClick={() =>
+                          openImageModal(prevSrc, formData.title || "Preview")
+                        }
+                      />
+                    )}
+                  </div>
+                  <p className="community-img-upload">
+                    <label htmlFor="img">Select Image:</label>
+                    <input
+                      type="file"
+                      id="img"
+                      name="img"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                    />
+                  </p>
+                </section>
 
-          <div className="form-row">
-            <label>
-              Category
-              <input
-                name="category"
-                value={formData.category}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-            <label>
-              Subclass
-              <input
-                name="subclass"
-                value={formData.subclass}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-          </div>
+                <button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Submitting..." : "Submit Artwork"}
+                </button>
+              </form>
+            </div>
 
-          <div className="form-row">
-            <label>
-              Type
-              <input
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-            <label>
-              Scaling
-              <input
-                name="scaling"
-                value={formData.scaling}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-          </div>
-
-          <div className="form-row">
-            <label className="full-width">
-              Requirements
-              <input
-                name="requirements"
-                value={formData.requirements}
-                onChange={handleInputChange}
-                required
-              />
-            </label>
-          </div>
-
-          <div className="form-row">
-            <label className="full-width">
-              Description
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                rows={3}
-                required
-              />
-            </label>
-          </div>
-
-          <div className="form-row image-row">
-            <div className="weapon-img-preview">
-              {imagePreview && (
-                <img
-                  src={imagePreview}
-                  alt="Weapon preview"
-                  className="weapon-img-preview-img"
-                />
+            <h4 className="community-subheading">Featured Artwork</h4>
+            <div className="art-grid">
+              {[art1, art2, art3, art4, art5, art6, art16, art17, art18].map(
+                (src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    className="art-img"
+                    alt={`Community Art ${i + 1}`}
+                    onClick={() =>
+                      openImageModal(src, `Featured Artwork ${i + 1}`)
+                    }
+                  />
+                )
               )}
             </div>
-            <label className="full-width">
-              Select Image
-              <input
-                type="file"
-                name="weaponImage"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
-            </label>
-          </div>
 
-          <button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Adding..." : "Add Weapon"}
-          </button>
-        </form>
-      </div>
+            {communityArt.length > 0 && (
+              <>
+                <h4 className="community-subheading">User Submissions</h4>
+                <div className="art-grid">
+                  {communityArt.map((art) => {
+                    let imgSrc = "";
 
-      <Modal
-        isOpen={!!selectedSubclass}
-        onClose={closeModal}
-        title={selectedSubclass?.label}
-      >
-        {selectedSubclass && currentWeapon && (
-          <div>
-            {modalImageSrc && (
-              <img
-                className="weapon-modal-icon"
-                src={modalImageSrc}
-                alt={currentWeapon.name}
-              />
+                    if (!art.imageUrl) {
+                      imgSrc = "";
+                    } else if (
+                      art.imageUrl.startsWith("http://") ||
+                      art.imageUrl.startsWith("https://") ||
+                      art.imageUrl.startsWith("blob:")
+                    ) {
+                      imgSrc = art.imageUrl;
+                    } else if (art.imageUrl.startsWith("/uploads/")) {
+                      imgSrc = uploadPreviews[art.imageUrl] || "";
+                    } else {
+                      imgSrc = `${BACKEND_URL}${art.imageUrl}`;
+                    }
+
+                    const id = art.id || art._id;
+
+                    const isEditingThis = editingId === id;
+                    const displayEditImg =
+                      isEditingThis && editingPreview
+                        ? editingPreview
+                        : imgSrc;
+
+                    return (
+                      <figure key={id} className="art-user-card">
+                        {displayEditImg && (
+                          <img
+                            src={displayEditImg}
+                            className="art-img art-img-square"
+                            alt={art.title}
+                            onClick={() =>
+                              openImageModal(
+                                displayEditImg,
+                                art.title || "User Artwork"
+                              )
+                            }
+                          />
+                        )}
+
+                        {isEditingThis ? (
+                          <div className="community-edit-block">
+                            <div className="community-edit-row">
+                              <label className="community-edit-label">
+                                Title
+                                <input
+                                  className="community-edit-input"
+                                  value={editingTitle}
+                                  onChange={(e) =>
+                                    setEditingTitle(e.target.value)
+                                  }
+                                />
+                              </label>
+                            </div>
+
+                            <div className="community-edit-row">
+                              <label className="community-edit-label">
+                                Change Image
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={handleEditImageUpload}
+                                />
+                              </label>
+                            </div>
+
+                            <div className="community-edit-actions">
+                              <button
+                                type="button"
+                                className="community-edit-save"
+                                onClick={() => saveEdit(id)}
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                className="community-edit-cancel"
+                                onClick={cancelEdit}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <figcaption>{art.title}</figcaption>
+                            <div className="community-actions">
+                              <button
+                                type="button"
+                                className="community-edit-button"
+                                onClick={() => startEdit(art)}
+                              >
+                                Edit
+                              </button>
+                              <button
+                                type="button"
+                                className="community-delete-button"
+                                onClick={() => handleDeleteArt(id)}
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </figure>
+                    );
+                  })}
+                </div>
+              </>
             )}
+          </div>
+        </section>
 
-            <div className="weapon-modal-selector">
-              {selectedSubclass.weapons.map((w, index) => (
-                <button
-                  key={w.id ?? w.name}
-                  className={
-                    index === selectedWeaponIndex
-                      ? "weapon-pill weapon-pill-active"
-                      : "weapon-pill"
+        <aside className="community-right">
+          <section className="band-dark">
+            <h3>Bosses Artwork</h3>
+            <div className="grid grid-3 comm-grid">
+              {[art7, art8, art9].map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  className="art-img1"
+                  alt={`Boss Art ${i + 1}`}
+                  onClick={() =>
+                    openImageModal(src, `Boss Artwork ${i + 1}`)
                   }
-                  onClick={() => selectWeaponByIndex(index)}
-                >
-                  {w.name}
-                </button>
+                />
               ))}
             </div>
+          </section>
 
-            {selectedSubclass.weapons.length > 1 && (
-              <div className="weapon-modal-nav">
-                <button onClick={goPrevWeapon}>⟵ Previous</button>
-                <span>
-                  {selectedWeaponIndex + 1} / {selectedSubclass.weapons.length}
-                </span>
-                <button onClick={goNextWeapon}>Next ⟶</button>
-              </div>
-            )}
-
-            <ul className="weapon-modal-details">
-              <li>
-                <strong>Name:</strong>{" "}
-                {isEditing ? (
-                  <input
-                    className="weapon-edit-input"
-                    value={editFields.name}
-                    onChange={(e) =>
-                      handleEditFieldChange("name", e.target.value)
-                    }
-                  />
-                ) : (
-                  currentWeapon.name
-                )}
-              </li>
-
-              <li>
-                <strong>Type:</strong>{" "}
-                {isEditing ? (
-                  <input
-                    className="weapon-edit-input"
-                    value={editFields.type}
-                    onChange={(e) =>
-                      handleEditFieldChange("type", e.target.value)
-                    }
-                  />
-                ) : (
-                  currentWeapon.type
-                )}
-              </li>
-
-              <li>
-                <strong>Scaling:</strong>{" "}
-                {isEditing ? (
-                  <input
-                    className="weapon-edit-input"
-                    value={editFields.scaling}
-                    onChange={(e) =>
-                      handleEditFieldChange("scaling", e.target.value)
-                    }
-                  />
-                ) : (
-                  currentWeapon.scaling
-                )}
-              </li>
-
-              <li>
-                <strong>Requirements:</strong>{" "}
-                {isEditing ? (
-                  <input
-                    className="weapon-edit-input"
-                    value={editFields.requirements}
-                    onChange={(e) =>
-                      handleEditFieldChange("requirements", e.target.value)
-                    }
-                  />
-                ) : (
-                  currentWeapon.requirements
-                )}
-              </li>
-            </ul>
-
-            <div className="weapon-modal-notes">
-              <strong>Description:</strong>{" "}
-              {isEditing ? (
-                <textarea
-                  className="weapon-edit-textarea"
-                  rows={3}
-                  value={editFields.description}
-                  onChange={(e) =>
-                    handleEditFieldChange("description", e.target.value)
+          <section className="band-dark">
+            <h3>In Game Pictures</h3>
+            <div className="grid grid-3 comm-grid">
+              {[art13, art14, art15].map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  className="art-img1"
+                  alt={`In Game ${i + 1}`}
+                  onClick={() =>
+                    openImageModal(src, `In Game Picture ${i + 1}`)
                   }
                 />
-              ) : (
-                <p>{currentWeapon.description}</p>
-              )}
+              ))}
             </div>
+          </section>
 
-            <div className="weapon-modal-actions">
-              {isEditing ? (
-                <>
-                  <button
-                    type="button"
-                    onClick={saveEditCurrentWeapon}
-                    className="weapon-edit-button"
-                  >
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    onClick={cancelEditCurrentWeapon}
-                    className="weapon-edit-cancel"
-                  >
-                    Cancel
-                  </button>
-                </>
-              ) : (
-                <button
-                  type="button"
-                  onClick={startEditCurrentWeapon}
-                  className="weapon-edit-button"
-                >
-                  Edit Info
-                </button>
-              )}
-
-              <button
-                type="button"
-                className="danger-button"
-                onClick={handleDeleteCurrentWeapon}
-              >
-                Delete This Weapon
-              </button>
+          <section className="band-dark">
+            <h3>Characters Artwork</h3>
+            <div className="grid grid-3 comm-grid">
+              {[art10, art11, art12].map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  className="art-img1"
+                  alt={`Character Art ${i + 1}`}
+                  onClick={() =>
+                    openImageModal(src, `Character Artwork ${i + 1}`)
+                  }
+                />
+              ))}
             </div>
+          </section>
+        </aside>
+      </main>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeImageModal}
+        title={modalImageTitle}
+      >
+        {modalImageSrc && (
+          <div className="community-modal-body">
+            <img
+              src={modalImageSrc}
+              alt={modalImageTitle}
+              className="community-modal-img"
+            />
           </div>
         )}
       </Modal>
@@ -764,4 +577,4 @@ const Weapons = () => {
   );
 };
 
-export default Weapons;
+export default Community;
