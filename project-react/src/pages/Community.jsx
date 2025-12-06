@@ -44,8 +44,6 @@ const Community = () => {
   const [editingImageUrl, setEditingImageUrl] = useState("");
   const [editingPreview, setEditingPreview] = useState("");
 
-  const [uploadPreviews, setUploadPreviews] = useState({});
-
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
 
@@ -90,28 +88,46 @@ const Community = () => {
     }));
   };
 
-  const handleImageUpload = (event) => {
+  // Upload image for new artwork
+  const handleImageUpload = async (event) => {
     const file = event.target.files[0];
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      const imgPath = `/uploads/${file.name}`;
-
-      setPrevSrc(previewUrl);
-      setFormData((prev) => ({
-        ...prev,
-        imageUrl: imgPath
-      }));
-
-      setUploadPreviews((prev) => ({
-        ...prev,
-        [imgPath]: previewUrl
-      }));
-    } else {
+    if (!file) {
       setPrevSrc("");
       setFormData((prev) => ({
         ...prev,
         imageUrl: ""
       }));
+      return;
+    }
+
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+
+      const res = await fetch(`${BACKEND_URL}/api/upload-image`, {
+        method: "POST",
+        body: uploadFormData
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.ok === false) {
+        console.error("Image upload failed:", data);
+        setFormErrors([data.message || "Image upload failed."]);
+        return;
+      }
+
+      const imgPath = data.path;
+
+      setFormData((prev) => ({
+        ...prev,
+        imageUrl: imgPath
+      }));
+
+      setPrevSrc(`${BACKEND_URL}${imgPath}`);
+    } catch (err) {
+      console.error("Error uploading image:", err);
+      setFormErrors(["Network or server error while uploading image."]);
     }
   };
 
@@ -179,12 +195,9 @@ const Community = () => {
       preview = "";
     } else if (
       rawUrl.startsWith("http://") ||
-      rawUrl.startsWith("https://") ||
-      rawUrl.startsWith("blob:")
+      rawUrl.startsWith("https://")
     ) {
       preview = rawUrl;
-    } else if (rawUrl.startsWith("/uploads/")) {
-      preview = uploadPreviews[rawUrl] || "";
     } else {
       preview = `${BACKEND_URL}${rawUrl}`;
     }
@@ -202,19 +215,34 @@ const Community = () => {
     setEditingPreview("");
   };
 
-  const handleEditImageUpload = (event) => {
+  // Upload new image while editing
+  const handleEditImageUpload = async (event) => {
     const file = event.target.files[0];
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      const imgPath = `/uploads/${file.name}`;
+    if (!file) return;
 
-      setEditingPreview(previewUrl);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+
+      const res = await fetch(`${BACKEND_URL}/api/upload-image`, {
+        method: "POST",
+        body: uploadFormData
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.ok === false) {
+        console.error("Edit image upload failed:", data);
+        alert(data.message || "Image upload failed.");
+        return;
+      }
+
+      const imgPath = data.path;
       setEditingImageUrl(imgPath);
-
-      setUploadPreviews((prev) => ({
-        ...prev,
-        [imgPath]: previewUrl
-      }));
+      setEditingPreview(`${BACKEND_URL}${imgPath}`);
+    } catch (err) {
+      console.error("Error uploading edit image:", err);
+      alert("Network error while uploading image.");
     }
   };
 
@@ -389,23 +417,20 @@ const Community = () => {
                 <h4 className="community-subheading">User Submissions</h4>
                 <div className="art-grid">
                   {communityArt.map((art) => {
-                    let imgSrc = "";
+                    const id = art.id || art._id;
+                    const rawUrl = art.imageUrl || "";
 
-                    if (!art.imageUrl) {
+                    let imgSrc = "";
+                    if (!rawUrl) {
                       imgSrc = "";
                     } else if (
-                      art.imageUrl.startsWith("http://") ||
-                      art.imageUrl.startsWith("https://") ||
-                      art.imageUrl.startsWith("blob:")
+                      rawUrl.startsWith("http://") ||
+                      rawUrl.startsWith("https://")
                     ) {
-                      imgSrc = art.imageUrl;
-                    } else if (art.imageUrl.startsWith("/uploads/")) {
-                      imgSrc = uploadPreviews[art.imageUrl] || "";
+                      imgSrc = rawUrl;
                     } else {
-                      imgSrc = `${BACKEND_URL}${art.imageUrl}`;
+                      imgSrc = `${BACKEND_URL}${rawUrl}`;
                     }
-
-                    const id = art.id || art._id;
 
                     const isEditingThis = editingId === id;
                     const displayEditImg =

@@ -1,3 +1,4 @@
+// src/pages/Weapons.jsx
 import { useEffect, useState } from "react";
 import "../css/Weapons.css";
 import Modal from "../components/Modal";
@@ -5,7 +6,7 @@ import BACKEND_URL from "../config";
 
 /* ========= Small presentational components ========= */
 
-const SubclassCard = ({ subclass, onClick, uploadPreviews }) => {
+const SubclassCard = ({ subclass, onClick }) => {
   let iconSrc = null;
 
   if (subclass.icon) {
@@ -14,10 +15,8 @@ const SubclassCard = ({ subclass, onClick, uploadPreviews }) => {
       subclass.icon.startsWith("https://")
     ) {
       iconSrc = subclass.icon;
-    } else if (subclass.icon.startsWith("/uploads/")) {
-      // Use stored blob URL from uploads map
-      iconSrc = uploadPreviews[subclass.icon] || null;
     } else {
+      // Treat any non-http icon as a server path
       iconSrc = `${BACKEND_URL}${subclass.icon}`;
     }
   }
@@ -30,12 +29,7 @@ const SubclassCard = ({ subclass, onClick, uploadPreviews }) => {
   );
 };
 
-const WeaponSection = ({
-  title,
-  subclasses,
-  onSubclassClick,
-  uploadPreviews
-}) => (
+const WeaponSection = ({ title, subclasses, onSubclassClick }) => (
   <div className="weapon-section">
     <h2 className="weapon-section-title">{title}</h2>
     <div className="weapon-scroll-row">
@@ -44,7 +38,6 @@ const WeaponSection = ({
           key={sub.id}
           subclass={sub}
           onClick={() => onSubclassClick(sub)}
-          uploadPreviews={uploadPreviews}
         />
       ))}
     </div>
@@ -73,7 +66,6 @@ const Weapons = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [imagePreview, setImagePreview] = useState("");
-  const [uploadPreviews, setUploadPreviews] = useState({}); // { [imgPath]: blobUrl }
 
   const [isEditing, setIsEditing] = useState(false);
   const [editFields, setEditFields] = useState({
@@ -87,7 +79,7 @@ const Weapons = () => {
   const [editImagePath, setEditImagePath] = useState("");
   const [editImagePreview, setEditImagePreview] = useState("");
 
-  // 🔔 Toast popup state
+  // Toast popup state
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
 
@@ -221,7 +213,7 @@ const Weapons = () => {
       errors.push("Requirements are required.");
     if (!formData.description.trim())
       errors.push("Description is required.");
-    if (!formData.img.trim()) errors.push("Please select an image file.");
+    if (!formData.img.trim()) errors.push("Please select an image file (upload).");
 
     return errors;
   };
@@ -234,31 +226,47 @@ const Weapons = () => {
     }));
   };
 
-  const handleImageChange = (e) => {
+  // Upload image to backend and store returned path
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
 
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      const imgPath = `/uploads/${file.name}`;
+    if (!file) {
+      setImagePreview("");
+      setFormData((prev) => ({
+        ...prev,
+        img: ""
+      }));
+      return;
+    }
 
-      setImagePreview(previewUrl);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+
+      const res = await fetch(`${BACKEND_URL}/api/upload-image`, {
+        method: "POST",
+        body: uploadFormData
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.ok === false) {
+        console.error("Image upload failed:", data);
+        setFormErrors([data.message || "Image upload failed."]);
+        return;
+      }
+
+      const imgPath = data.path; // e.g. "/uploads/12345-weapon.png"
 
       setFormData((prev) => ({
         ...prev,
         img: imgPath
       }));
 
-      // Store blob URL mapped to this /uploads path
-      setUploadPreviews((prev) => ({
-        ...prev,
-        [imgPath]: previewUrl
-      }));
-    } else {
-      setImagePreview("");
-      setFormData((prev) => ({
-        ...prev,
-        img: ""
-      }));
+      setImagePreview(`${BACKEND_URL}${imgPath}`);
+    } catch (err) {
+      console.error("Error uploading image:", err);
+      setFormErrors(["Network or server error while uploading image."]);
     }
   };
 
@@ -286,6 +294,7 @@ const Weapons = () => {
       if (!res.ok || data.ok === false || data.success === false) {
         const backendErrors =
           data.details || [data.message || "Failed to add weapon."];
+
         setFormErrors(backendErrors);
         return;
       }
@@ -360,15 +369,12 @@ const Weapons = () => {
       description: currentWeapon.description || ""
     });
 
-    // Initialize image edit fields
     const imgPath = currentWeapon.img || "";
     setEditImagePath(imgPath);
 
     let initialPreview = "";
     if (imgPath) {
-      if (imgPath.startsWith("/uploads/")) {
-        initialPreview = uploadPreviews[imgPath] || "";
-      } else if (
+      if (
         imgPath.startsWith("http://") ||
         imgPath.startsWith("https://")
       ) {
@@ -393,19 +399,33 @@ const Weapons = () => {
     }));
   };
 
-  const handleEditImageChange = (e) => {
+  const handleEditImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const previewUrl = URL.createObjectURL(file);
-      const imgPath = `/uploads/${file.name}`;
+    if (!file) return;
 
-      setEditImagePreview(previewUrl);
+    try {
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
+
+      const res = await fetch(`${BACKEND_URL}/api/upload-image`, {
+        method: "POST",
+        body: uploadFormData
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.ok === false) {
+        console.error("Edit image upload failed:", data);
+        alert(data.message || "Image upload failed.");
+        return;
+      }
+
+      const imgPath = data.path;
       setEditImagePath(imgPath);
-
-      setUploadPreviews((prev) => ({
-        ...prev,
-        [imgPath]: previewUrl
-      }));
+      setEditImagePreview(`${BACKEND_URL}${imgPath}`);
+    } catch (err) {
+      console.error("Error uploading edit image:", err);
+      alert("Network error while uploading image.");
     }
   };
 
@@ -513,6 +533,7 @@ const Weapons = () => {
     }
   };
 
+  // Build image src for the modal from server paths / external URLs
   let modalImageSrc = null;
 
   if (currentWeapon && currentWeapon.img && currentWeapon.img.trim() !== "") {
@@ -521,10 +542,6 @@ const Weapons = () => {
       currentWeapon.img.startsWith("https://")
     ) {
       modalImageSrc = currentWeapon.img;
-    } else if (currentWeapon.img.startsWith("/uploads/")) {
-      // Use stored blob URL for uploaded images (or current edit preview)
-      modalImageSrc =
-        uploadPreviews[currentWeapon.img] || editImagePreview || null;
     } else {
       modalImageSrc = `${BACKEND_URL}${currentWeapon.img}`;
     }
@@ -545,7 +562,6 @@ const Weapons = () => {
               title={section.title}
               subclasses={section.subclasses}
               onSubclassClick={openSubclassModal}
-              uploadPreviews={uploadPreviews}
             />
           ))}
         </div>
