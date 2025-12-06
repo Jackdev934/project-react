@@ -1,10 +1,7 @@
-// src/pages/Weapons.jsx
 import { useEffect, useState } from "react";
 import "../css/Weapons.css";
 import Modal from "../components/Modal";
 import BACKEND_URL from "../config";
-
-/* ========= Small presentational components ========= */
 
 const SubclassCard = ({ subclass, onClick }) => {
   let iconSrc = null;
@@ -16,7 +13,6 @@ const SubclassCard = ({ subclass, onClick }) => {
     ) {
       iconSrc = subclass.icon;
     } else {
-      // Treat any non-http icon as a server path
       iconSrc = `${BACKEND_URL}${subclass.icon}`;
     }
   }
@@ -43,8 +39,6 @@ const WeaponSection = ({ title, subclasses, onSubclassClick }) => (
     </div>
   </div>
 );
-
-/* ========= Main Component ========= */
 
 const Weapons = () => {
   const [weaponSections, setWeaponSections] = useState([]);
@@ -79,7 +73,6 @@ const Weapons = () => {
   const [editImagePath, setEditImagePath] = useState("");
   const [editImagePreview, setEditImagePreview] = useState("");
 
-  // Toast popup state
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
 
@@ -213,7 +206,8 @@ const Weapons = () => {
       errors.push("Requirements are required.");
     if (!formData.description.trim())
       errors.push("Description is required.");
-    if (!formData.img.trim()) errors.push("Please select an image file (upload).");
+    if (!formData.img.trim())
+      errors.push("Please select an image file (upload).");
 
     return errors;
   };
@@ -226,7 +220,6 @@ const Weapons = () => {
     }));
   };
 
-  // Upload image to backend and store returned path
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
 
@@ -256,7 +249,7 @@ const Weapons = () => {
         return;
       }
 
-      const imgPath = data.path; // e.g. "/uploads/12345-weapon.png"
+      const imgPath = data.path;
 
       setFormData((prev) => ({
         ...prev,
@@ -468,7 +461,6 @@ const Weapons = () => {
         return;
       }
 
-      // Update local state so modal shows new values immediately
       setWeaponSections((prev) =>
         prev.map((section) => ({
           ...section,
@@ -533,7 +525,6 @@ const Weapons = () => {
     }
   };
 
-  // Build image src for the modal from server paths / external URLs
   let modalImageSrc = null;
 
   if (currentWeapon && currentWeapon.img && currentWeapon.img.trim() !== "") {
@@ -567,7 +558,6 @@ const Weapons = () => {
         </div>
       </div>
 
-      {/* Add Weapon Panel */}
       <div className="add-weapon-panel">
         <h3>Add a New Weapon</h3>
 
@@ -643,7 +633,7 @@ const Weapons = () => {
             </label>
           </div>
 
-          <div className="form-row">
+          <div className="form-row full-width">
             <label className="full-width">
               Requirements
               <input
@@ -655,7 +645,7 @@ const Weapons = () => {
             </label>
           </div>
 
-          <div className="form-row">
+          <div className="form-row full-width">
             <label className="full-width">
               Description
               <textarea
@@ -668,7 +658,7 @@ const Weapons = () => {
             </label>
           </div>
 
-          <div className="form-row image-row">
+          <div className="form-row image-row full-width">
             <div className="weapon-img-preview">
               {imagePreview && (
                 <img
@@ -695,7 +685,6 @@ const Weapons = () => {
         </form>
       </div>
 
-      {/* Weapon Modal (View & Edit) */}
       <Modal
         isOpen={!!selectedSubclass}
         onClose={closeModal}
@@ -703,7 +692,6 @@ const Weapons = () => {
       >
         {selectedSubclass && currentWeapon && (
           <div className="weapon-modal-content">
-            {/* Top image - shrinks while editing */}
             {modalImageSrc && (
               <img
                 className={`weapon-modal-icon ${
@@ -734,7 +722,6 @@ const Weapons = () => {
               </div>
             )}
 
-            {/* Weapon selector pills */}
             <div className="weapon-modal-selector">
               {selectedSubclass.weapons.map((w, index) => (
                 <button
@@ -761,7 +748,6 @@ const Weapons = () => {
               </div>
             )}
 
-            {/* Aligned fields */}
             <div className="weapon-modal-details">
               <div className="weapon-modal-field-row">
                 <label className="weapon-edit-label">
