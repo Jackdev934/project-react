@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/project-react/static/css/main.a4f2afca.css",
-    "main.js": "/project-react/static/js/main.a92ed7a2.js",
+    "main.css": "/project-react/static/css/main.8c688b85.css",
+    "main.js": "/project-react/static/js/main.b0db1cfd.js",
     "static/media/map-2.jpg": "/project-react/static/media/map-2.f7b8831c1cee83c2f6f9.jpg",
     "static/media/art13.jpg": "/project-react/static/media/art13.18b21b6b15ea4465a802.jpg",
     "static/media/lore1.jpeg": "/project-react/static/media/lore1.91837d63ed7ed9e4b190.jpeg",
@@ -21,11 +21,11 @@
     "static/media/fan2.jpeg": "/project-react/static/media/fan2.c2b985880b9758ec1000.jpeg",
     "static/media/boss1.jpeg": "/project-react/static/media/boss1.2f26a5c296ba1f78a6bd.jpeg",
     "index.html": "/project-react/index.html",
-    "main.a4f2afca.css.map": "/project-react/static/css/main.a4f2afca.css.map",
-    "main.a92ed7a2.js.map": "/project-react/static/js/main.a92ed7a2.js.map"
+    "main.8c688b85.css.map": "/project-react/static/css/main.8c688b85.css.map",
+    "main.b0db1cfd.js.map": "/project-react/static/js/main.b0db1cfd.js.map"
   },
   "entrypoints": [
-    "static/css/main.a4f2afca.css",
-    "static/js/main.a92ed7a2.js"
+    "static/css/main.8c688b85.css",
+    "static/js/main.b0db1cfd.js"
   ]
 }
